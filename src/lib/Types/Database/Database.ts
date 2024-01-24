@@ -50,41 +50,6 @@ export interface Database {
         }
         Relationships: []
       }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          full_name: string | null
-          id: string
-          updated_at: string | null
-          username: string | null
-          website: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          full_name?: string | null
-          id: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          full_name?: string | null
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       tickets: {
         Row: {
           branch_id: number | null
@@ -92,7 +57,11 @@ export interface Database {
           priority: string | null
           status: string | null
           ticket_id: number
+          user_email: string | null
+          user_firstName: string | null
+          user_fullName: string | null
           user_id: string | null
+          user_lastName: string | null
         }
         Insert: {
           branch_id?: number | null
@@ -100,7 +69,11 @@ export interface Database {
           priority?: string | null
           status?: string | null
           ticket_id?: number
+          user_email?: string | null
+          user_firstName?: string | null
+          user_fullName?: string | null
           user_id?: string | null
+          user_lastName?: string | null
         }
         Update: {
           branch_id?: number | null
@@ -108,7 +81,11 @@ export interface Database {
           priority?: string | null
           status?: string | null
           ticket_id?: number
+          user_email?: string | null
+          user_firstName?: string | null
+          user_fullName?: string | null
           user_id?: string | null
+          user_lastName?: string | null
         }
         Relationships: [
           {
@@ -117,13 +94,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "branches"
             referencedColumns: ["branch_id"]
-          },
-          {
-            foreignKeyName: "tickets_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
           }
         ]
       }
@@ -132,7 +102,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      requesting_user_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

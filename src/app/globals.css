@@ -70,12 +70,14 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background p-8 text-foreground md:p-4;
+    @apply bg-background text-foreground md:p-4;
+    @apply p-8 !important;
   }
 
   nav {
-    @apply justify-between border border-b-slate-500 pb-4;
+    @apply justify-between border-b-2 border-slate-500 pb-4;
   }
 
   nav,

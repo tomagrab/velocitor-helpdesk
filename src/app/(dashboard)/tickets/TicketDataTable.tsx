@@ -1,48 +1,41 @@
 'use client';
-import { Database } from '@/lib/Types/Database/Database';
 import { useAuth, useUser } from '@clerk/nextjs';
-import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { DataTable } from './DataTable';
 import { columns } from './DataTableColumns';
-import { UseUserT } from '@/lib/Types/User/User';
-
-const supabaseClient = async (supabaseAccessToken: string) => {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      global: { headers: { Authorization: `Bearer ${supabaseAccessToken}` } },
-    },
-  );
-  return supabase;
-};
+import { TicketData } from '@/lib/Types/TicketData/TicketData';
+import { supabaseClient } from '@/lib/Database/Supabase';
 
 export default function TicketDataTable() {
-  const [tickets, setTickets] = useState<
-    Database['public']['Tables']['tickets']['Row'][]
-  >([]);
-  const { isLoaded, isSignedIn, user } = useUser() as UseUserT;
-  console.log('user', user);
+  const [tickets, setTickets] = useState<TicketData[]>([]);
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const { getToken } = useAuth();
 
   const fetchData = async () => {
+    if (!isLoaded || !isSignedIn || !user) return;
+
     try {
       const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-      const supabase = await supabaseClient(supabaseAccessToken!);
-
-      if (isLoaded && isSignedIn && user) {
-        const { data, error } = await supabase
-          .from('tickets')
-          .select()
-          .eq('user_id', user.id);
-
-        if (error) throw error;
-
-        setTickets(data);
+      if (!supabaseAccessToken) {
+        console.error('Failed to get access token');
+        return;
       }
+
+      const supabase = await supabaseClient(supabaseAccessToken);
+
+      const { data, error } = await supabase.from('tickets').select(`
+        ticket_id,
+        status,
+        priority,
+        user_fullName,
+        branches:branches!inner(branch_name, companies:companies!inner(company_name))
+      `);
+
+      console.log('data', data);
+
+      if (error) throw error;
+      if (data) setTickets(data as unknown as TicketData[]);
     } catch (error) {
       console.error('error', error);
     }
@@ -50,7 +43,7 @@ export default function TicketDataTable() {
 
   useEffect(() => {
     fetchData();
-  }, [user]);
+  }, [user]); // Dependency on user object
 
   return <DataTable columns={columns} data={tickets} />;
 }

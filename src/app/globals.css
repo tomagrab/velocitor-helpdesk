@@ -90,7 +90,7 @@
   }
 
   main {
-    @apply items-center pt-4;
+    @apply pt-4;
   }
 
   main,
@@ -98,23 +98,43 @@
     @apply flex flex-col;
   }
 
-  main div {
-    @apply w-full;
-  }
-
   form {
     @apply mx-auto w-full max-w-md gap-2 rounded-lg p-8 shadow-xl;
   }
 
   h1 {
-    @apply text-lg font-bold md:text-xl;
+    @apply text-xl font-bold md:text-2xl;
   }
 
   h2 {
-    @apply text-sm font-bold md:text-lg;
+    @apply text-lg font-bold md:text-xl;
   }
 
   h3 {
-    @apply text-xs text-gray-700 md:text-sm;
+    @apply text-base text-gray-700 md:text-lg;
   }
+
+  p {
+    @apply text-sm text-gray-700 md:text-base;
+  }
+}
+
+.status.Open {
+  @apply bg-green-500;
+}
+
+.status.Closed {
+  @apply bg-red-500;
+}
+
+.priority.low {
+  @apply bg-blue-500;
+}
+
+.priority.medium {
+  @apply bg-yellow-500;
+}
+
+.priority.high {
+  @apply bg-red-500;
 }

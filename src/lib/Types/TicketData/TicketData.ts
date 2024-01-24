@@ -3,6 +3,7 @@ export type TicketData = {
   status: string | null;
   priority: string | null;
   user_fullName: string | null;
+  notes?: string | null;
   branches: {
     branch_name: string;
     companies: {

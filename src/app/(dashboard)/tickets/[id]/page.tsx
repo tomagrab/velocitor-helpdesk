@@ -1,4 +1,9 @@
+import { Suspense } from 'react';
 import TicketDetailsCard from './TicketDetailsCard';
+import Loading from './loading';
+import { auth } from '@clerk/nextjs';
+import { supabaseClient } from '@/lib/Database/Supabase';
+import { TicketData } from '@/lib/Types/TicketData/TicketData';
 
 type TicketDetailsProps = {
   params: {
@@ -6,11 +11,53 @@ type TicketDetailsProps = {
   };
 };
 
-export default function TicketDetails({ params: { id } }: TicketDetailsProps) {
+const getTicket = async (id: number) => {
+  const { userId, getToken } = await auth();
+  const supabaseAccessToken = await getToken({ template: 'supabase' });
+
+  if (!supabaseAccessToken) {
+    console.error('No access token found');
+    return;
+  }
+
+  const supabase = await supabaseClient(supabaseAccessToken);
+
+  const { data, error } = await supabase
+    .from('tickets')
+    .select(
+      `
+            ticket_id,
+            status,
+            priority,
+            user_fullName,
+            notes,
+            branches:branches!inner(branch_name, companies:companies!inner(company_name))
+      `,
+    )
+    .eq('ticket_id', id);
+
+  if (error) {
+    throw error;
+  }
+
+  return (data[0] as unknown as TicketData) || [];
+};
+
+export default async function TicketDetails({
+  params: { id },
+}: TicketDetailsProps) {
+  const ticket: TicketData = (await getTicket(Number(id))) as TicketData;
+
+  console.log(ticket);
+
   return (
-    <div>
+    <main>
       <h1>Ticket Details</h1>
-      <TicketDetailsCard id={Number(id)} />
-    </div>
+      <Suspense fallback={<Loading />}>
+        <div className="flex flex-col items-center">
+          <TicketDetailsCard ticket={ticket} />
+        </div>
+      </Suspense>
+    </main>
   );
 }

@@ -96,6 +96,10 @@
     @apply flex flex-col;
   }
 
+  main div {
+    @apply w-full;
+  }
+
   form {
     @apply mx-auto w-full max-w-md gap-2 rounded-lg p-8 shadow-xl;
   }
@@ -105,10 +109,10 @@
   }
 
   h2 {
-    @apply text-lg font-bold md:text-xl;
+    @apply text-sm font-bold md:text-lg;
   }
 
   h3 {
-    @apply text-base text-gray-700 md:text-lg;
+    @apply text-xs text-gray-700 md:text-sm;
   }
 }

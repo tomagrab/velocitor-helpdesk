@@ -71,9 +71,44 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background p-8 text-foreground md:p-4;
   }
+
+  nav {
+    @apply justify-between border border-b-slate-500 pb-4;
+  }
+
+  nav,
+  header {
+    @apply flex items-center;
+  }
+
+  header {
+    @apply flex-col gap-2 md:flex-row;
+  }
+
+  main {
+    @apply items-center pt-4;
+  }
+
+  main,
   form {
-    @apply mx-auto max-w-xl;
+    @apply flex flex-col;
+  }
+
+  form {
+    @apply mx-auto w-full max-w-md gap-2 rounded-lg p-8 shadow-xl;
+  }
+
+  h1 {
+    @apply text-lg font-bold md:text-xl;
+  }
+
+  h2 {
+    @apply text-lg font-bold md:text-xl;
+  }
+
+  h3 {
+    @apply text-base text-gray-700 md:text-lg;
   }
 }

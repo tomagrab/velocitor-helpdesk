@@ -225,7 +225,7 @@ export default function CreateTicketForm() {
                     <CommandGroup>
                       {branches.map(branch => (
                         <CommandItem
-                          value={branch.branch_name}
+                          value={branch.branch_name as string}
                           key={branch.branch_id}
                           onSelect={() => {
                             createTicketForm.setValue(

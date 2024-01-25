@@ -10,7 +10,15 @@ type NavbarLinkProps = {
 export default function NavbarLink({ href, pathname, title }: NavbarLinkProps) {
   return (
     <Link href={href}>
-      <Button variant={pathname === href ? `default` : `ghost`}>{title}</Button>
+      <Button
+        variant={
+          pathname === href || (pathname.includes(href) && href.length != 1)
+            ? `default`
+            : `ghost`
+        }
+      >
+        {title}
+      </Button>
     </Link>
   );
 }

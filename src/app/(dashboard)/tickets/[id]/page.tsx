@@ -12,7 +12,7 @@ type TicketDetailsProps = {
 };
 
 const getTicket = async (id: number) => {
-  const { userId, getToken } = await auth();
+  const { getToken } = await auth();
   const supabaseAccessToken = await getToken({ template: 'supabase' });
 
   if (!supabaseAccessToken) {

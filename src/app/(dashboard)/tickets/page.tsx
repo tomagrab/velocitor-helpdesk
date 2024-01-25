@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import TicketsDataTable from '@/components/DataTable/TicketsDataTable';
+import TicketsDataTable from '@/components/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
 import { auth } from '@clerk/nextjs';
 import { supabaseClient } from '@/lib/Database/Supabase';

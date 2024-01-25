@@ -10,6 +10,7 @@ export default function NavbarLinks() {
       <NavbarLink href="/" pathname={pathname} title="Dashboard" />
       <NavbarLink href="/tickets" pathname={pathname} title="Tickets" />
       <NavbarLink href="/companies" pathname={pathname} title="Companies" />
+      <NavbarLink href="/branches" pathname={pathname} title="Branches" />
     </div>
   );
 }

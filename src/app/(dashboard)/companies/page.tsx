@@ -1,4 +1,4 @@
-import CompaniesDataTable from '@/components/ComapniesDataTable/ComapniesDataTable';
+import CompaniesDataTable from '@/components/DataTable/ComapniesDataTable/ComapniesDataTable';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { Company } from '@/lib/Types/Company/Company';
 import { auth } from '@clerk/nextjs';
@@ -28,7 +28,7 @@ export default async function Companies() {
   return (
     <main>
       <div className="flex flex-row items-baseline gap-2">
-        <h2>Dashboard</h2>
+        <h2>Companies</h2>
         {companies.length > 0 && companies.length != 1 ? (
           <h3>
             There are <b>{companies.length}</b> companies

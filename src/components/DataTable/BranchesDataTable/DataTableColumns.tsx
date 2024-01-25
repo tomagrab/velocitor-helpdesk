@@ -15,7 +15,7 @@ export const columns: ColumnDef<Branch>[] = [
     header: ({ column }) => {
       return (
         <ColumnHeader
-          title="branch #"
+          title="Branch #"
           clickEvent={() =>
             column.toggleSorting(column.getIsSorted() === 'asc')
           }
@@ -34,7 +34,7 @@ export const columns: ColumnDef<Branch>[] = [
     header: ({ column }) => {
       return (
         <ColumnHeader
-          title="branch Name"
+          title="Branch Name"
           clickEvent={() =>
             column.toggleSorting(column.getIsSorted() === 'asc')
           }

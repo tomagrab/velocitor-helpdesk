@@ -1,4 +1,4 @@
-import TicketsDataTable from '@/components/TicketDataTable/TicketsDataTable';
+import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth } from '@clerk/nextjs';

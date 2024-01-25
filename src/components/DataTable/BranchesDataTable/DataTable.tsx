@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center justify-between gap-2 py-4">
         <Input
-          placeholder="Filter Company ID..."
+          placeholder="Filter Branch ID..."
           className="max-w-sm"
           value={
             (table.getColumn('branch_id')?.getFilterValue() as string) ?? ''
@@ -76,13 +76,13 @@ export function DataTable<TData, TValue>({
           }
         />
         <Input
-          placeholder="Filter Company Name..."
+          placeholder="Filter Branch Name..."
           className="max-w-sm"
           value={
-            (table.getColumn('company_name')?.getFilterValue() as string) ?? ''
+            (table.getColumn('branch_name')?.getFilterValue() as string) ?? ''
           }
           onChange={event =>
-            table.getColumn('company_name')?.setFilterValue(event.target.value)
+            table.getColumn('branch_name')?.setFilterValue(event.target.value)
           }
         />
         <DropdownMenu>
@@ -105,8 +105,8 @@ export function DataTable<TData, TValue>({
                   >
                     {column.id === 'branch_id'
                       ? 'Branch ID'
-                      : column.id === 'company_name'
-                        ? 'Company Name'
+                      : column.id === 'branch_name'
+                        ? 'Branch Name'
                         : column.id}
                   </DropdownMenuCheckboxItem>
                 );

@@ -6,16 +6,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Company } from '@/lib/Types/Company/Company';
+import { Branch } from '@/lib/Types/Branch/Branch';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
 type DataTableColumnsActionsProps = {
-  company: Company;
+  branch: Branch;
 };
 
 export default function DataTableColumnsActions({
-  company,
+  branch,
 }: DataTableColumnsActionsProps) {
   return (
     <DropdownMenu>
@@ -30,9 +30,9 @@ export default function DataTableColumnsActions({
         <DropdownMenuItem>
           <Link
             className="w-full text-center"
-            href={`/companies/${company.company_id}`}
+            href={`/branches/${branch.branch_id}`}
           >
-            View ticket
+            View Branch
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

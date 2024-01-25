@@ -1,6 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import NavbarLinks from './NavbarLinks/NavbarLinks';
 import NavbarUser from './NavbarUser/NavbarUser';
+import { Roboto } from 'next/font/google';
+const roboto = Roboto({
+  weight: '900',
+  subsets: ['latin'],
+});
 
 export default function Navbar() {
   return (
@@ -13,7 +18,16 @@ export default function Navbar() {
           />
           <AvatarFallback>VH</AvatarFallback>
         </Avatar>
-        <h1>Velocitor Helpdesk</h1>
+        <h1>
+          <span className={`velocitor blue ${roboto.className}`}>
+            Velocitor
+          </span>
+          {` `}
+          <span className={`velocitor yellow green ${roboto.className}`}>
+            Helpdesk
+          </span>
+        </h1>
+
         <NavbarLinks />
       </header>
       <NavbarUser />

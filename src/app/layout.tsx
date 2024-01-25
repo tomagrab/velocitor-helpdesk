@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
-import { Rubik } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 
 export const dynamic = 'force-dynamic';
 
-const rubik = Rubik({ subsets: ['latin'] });
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: 'Velocitor Helpdesk',
@@ -20,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${rubik.className}`}>{children}</body>
+        <body className={`${roboto.className}`}>{children}</body>
       </html>
     </ClerkProvider>
   );

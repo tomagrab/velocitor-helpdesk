@@ -9,7 +9,7 @@ export default function NavbarLinks() {
     <div className={`flex flex-row items-center gap-2`}>
       <NavbarLink href="/" pathname={pathname} title="Dashboard" />
       <NavbarLink href="/tickets" pathname={pathname} title="Tickets" />
-      <NavbarLink href="/about" pathname={pathname} title="About" />
+      <NavbarLink href="/companies" pathname={pathname} title="Companies" />
     </div>
   );
 }

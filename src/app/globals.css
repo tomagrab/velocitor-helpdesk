@@ -103,7 +103,7 @@
   }
 
   h1 {
-    @apply text-xl font-bold md:text-2xl;
+    @apply text-xl  md:text-2xl;
   }
 
   h2 {
@@ -119,12 +119,20 @@
   }
 }
 
+.velocitor.blue {
+  @apply text-[#3097b9];
+}
+
+.velocitor.yellow.green {
+  @apply text-[#d9e252];
+}
+
 .status.Open {
-  @apply bg-green-500;
+  @apply bg-[#40bf89];
 }
 
 .status.Closed {
-  @apply bg-red-500;
+  @apply bg-[#fd5a4b];
 }
 
 .priority.low {
@@ -136,5 +144,5 @@
 }
 
 .priority.high {
-  @apply bg-red-500;
+  @apply bg-[#fd5a4b];
 }

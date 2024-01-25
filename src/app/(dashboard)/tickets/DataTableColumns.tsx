@@ -3,15 +3,16 @@
 import { Badge } from '@/components/ui/badge';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import DataTableColumnsActions from './DataTableColumnsActions';
-import { Button } from '@/components/ui/button';
 import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
 
 export const columns: ColumnDef<TicketData>[] = [
   {
     accessorKey: 'ticket_id',
+    accessorFn: ticket => {
+      return ticket.ticket_id.toString();
+    },
     header: ({ column }) => {
       return (
         <ColumnHeader
@@ -125,7 +126,7 @@ export const columns: ColumnDef<TicketData>[] = [
     header: ({ column }) => {
       return (
         <ColumnHeader
-          title="Assigned to"
+          title="Creator"
           clickEvent={() =>
             column.toggleSorting(column.getIsSorted() === 'asc')
           }

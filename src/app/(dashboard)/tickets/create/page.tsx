@@ -1,3 +1,5 @@
+import { auth } from '@clerk/nextjs';
+
 import CreateTicketForm from './CreateTicketForm';
 
 export default function Create() {

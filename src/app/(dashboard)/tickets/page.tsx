@@ -6,7 +6,7 @@ import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 
 const getTickets = async () => {
-  const { getToken } = await auth();
+  const { getToken } = auth();
   const supabaseAccessToken = await getToken({ template: 'supabase' });
 
   if (!supabaseAccessToken) {

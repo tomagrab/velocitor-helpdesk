@@ -122,11 +122,13 @@ export function DataTable<TData, TValue>({
           }
         />
         <Input
-          placeholder="Filter Creator..."
+          placeholder="Filter Assigned To..."
           className="max-w-sm"
-          value={(table.getColumn('creator')?.getFilterValue() as string) ?? ''}
+          value={
+            (table.getColumn('assigned_to')?.getFilterValue() as string) ?? ''
+          }
           onChange={event =>
-            table.getColumn('creator')?.setFilterValue(event.target.value)
+            table.getColumn('assigned_to')?.setFilterValue(event.target.value)
           }
         />
         <DropdownMenu>

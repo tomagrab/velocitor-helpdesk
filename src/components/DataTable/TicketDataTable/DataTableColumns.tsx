@@ -6,8 +6,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import DataTableColumnsActions from './DataTableColumnsActions';
 import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
+import { User } from '@clerk/nextjs/server';
 
-export const columns: ColumnDef<TicketData>[] = [
+export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
   {
     accessorKey: 'ticket_id',
     accessorFn: ticket => {
@@ -122,16 +123,15 @@ export const columns: ColumnDef<TicketData>[] = [
     },
   },
   {
-    accessorKey: 'creator',
-    accessorFn: row => {
-      return row.user_fullName === 'null null' || !row.user_fullName
-        ? row.user_email
-        : row.user_fullName;
-    },
+    accessorKey: 'assigned_to',
+    accessorFn: row =>
+      users.find(user => user.id === row.assigned_to)?.emailAddresses[0]
+        .emailAddress,
+
     header: ({ column }) => {
       return (
         <ColumnHeader
-          title="Creator"
+          title="Assigned To"
           clickEvent={() =>
             column.toggleSorting(column.getIsSorted() === 'asc')
           }
@@ -143,9 +143,10 @@ export const columns: ColumnDef<TicketData>[] = [
 
       return (
         <DataTableColumnsCell>
-          {ticket.user_fullName === 'null null' || !ticket.user_fullName
-            ? ticket.user_email
-            : ticket.user_fullName}
+          {
+            users.find(user => user.id === ticket.assigned_to)
+              ?.emailAddresses[0].emailAddress
+          }
         </DataTableColumnsCell>
       );
     },

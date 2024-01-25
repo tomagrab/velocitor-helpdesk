@@ -1,12 +1,17 @@
 'use client';
+import { User } from '@clerk/nextjs/server';
 import { DataTable } from './DataTable';
-import { columns } from './DataTableColumns';
+import { getColumns } from './DataTableColumns';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 
 type TicketDataTableProps = {
   tickets: TicketData[];
+  users: User[];
 };
 
-export default function TicketsDataTable({ tickets }: TicketDataTableProps) {
-  return <DataTable columns={columns} data={tickets} />;
+export default function TicketsDataTable({
+  tickets,
+  users,
+}: TicketDataTableProps) {
+  return <DataTable columns={getColumns(users)} data={tickets} />;
 }

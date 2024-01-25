@@ -11,16 +11,19 @@ export interface Database {
     Tables: {
       branches: {
         Row: {
+          added_by: string | null
           branch_id: number
           branch_name: string | null
           company_id: number | null
         }
         Insert: {
+          added_by?: string | null
           branch_id?: number
           branch_name?: string | null
           company_id?: number | null
         }
         Update: {
+          added_by?: string | null
           branch_id?: number
           branch_name?: string | null
           company_id?: number | null
@@ -37,14 +40,17 @@ export interface Database {
       }
       companies: {
         Row: {
+          added_by: string | null
           company_id: number
           company_name: string | null
         }
         Insert: {
+          added_by?: string | null
           company_id?: number
           company_name?: string | null
         }
         Update: {
+          added_by?: string | null
           company_id?: number
           company_name?: string | null
         }
@@ -52,40 +58,34 @@ export interface Database {
       }
       tickets: {
         Row: {
+          assigned_to: string | null
           branch_id: number | null
           notes: string | null
+          owned_by: string | null
           priority: string | null
           status: string | null
           ticket_id: number
-          user_email: string | null
-          user_firstName: string | null
-          user_fullName: string | null
-          user_id: string | null
-          user_lastName: string | null
+          user_id: string
         }
         Insert: {
+          assigned_to?: string | null
           branch_id?: number | null
           notes?: string | null
+          owned_by?: string | null
           priority?: string | null
           status?: string | null
           ticket_id?: number
-          user_email?: string | null
-          user_firstName?: string | null
-          user_fullName?: string | null
-          user_id?: string | null
-          user_lastName?: string | null
+          user_id: string
         }
         Update: {
+          assigned_to?: string | null
           branch_id?: number | null
           notes?: string | null
+          owned_by?: string | null
           priority?: string | null
           status?: string | null
           ticket_id?: number
-          user_email?: string | null
-          user_firstName?: string | null
-          user_fullName?: string | null
-          user_id?: string | null
-          user_lastName?: string | null
+          user_id?: string
         }
         Relationships: [
           {

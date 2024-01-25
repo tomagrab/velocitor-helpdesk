@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { auth } from '@clerk/nextjs';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
+import { clerkClient } from '@clerk/nextjs/server';
 
 const getTickets = async () => {
   const { getToken } = auth();
@@ -21,8 +22,9 @@ const getTickets = async () => {
             ticket_id,
             status,
             priority,
-            user_fullName,
-            user_email,
+            user_id,
+            assigned_to,
+            owned_by,
             branches:branches!inner(branch_name, companies:companies!inner(company_name))
       `,
   );
@@ -36,6 +38,8 @@ const getTickets = async () => {
 
 export default async function Tickets() {
   const tickets: TicketData[] = (await getTickets()) as TicketData[];
+  const data = await clerkClient.users.getUserList();
+  const users = JSON.parse(JSON.stringify(data));
   return (
     <main>
       <div className="flex flex-row items-center justify-between pb-4">
@@ -61,7 +65,7 @@ export default async function Tickets() {
         </Link>
       </div>
 
-      <TicketsDataTable tickets={tickets} />
+      <TicketsDataTable tickets={tickets} users={users} />
     </main>
   );
 }

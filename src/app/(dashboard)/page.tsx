@@ -1,8 +1,7 @@
 import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import { auth } from '@clerk/nextjs';
-import { redirect } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs';
 
 const getTickets = async (userId: string) => {
   const { getToken } = auth();

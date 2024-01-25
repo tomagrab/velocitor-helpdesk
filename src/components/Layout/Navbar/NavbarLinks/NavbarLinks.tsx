@@ -11,6 +11,7 @@ export default function NavbarLinks() {
       <NavbarLink href="/tickets" pathname={pathname} title="Tickets" />
       <NavbarLink href="/companies" pathname={pathname} title="Companies" />
       <NavbarLink href="/branches" pathname={pathname} title="Branches" />
+      <NavbarLink href="/users" pathname={pathname} title="Users" />
     </div>
   );
 }

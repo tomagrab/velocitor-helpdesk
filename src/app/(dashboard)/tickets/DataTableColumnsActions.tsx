@@ -28,7 +28,12 @@ export default function DataTableColumnsActions({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem>
-          <Link href={`/tickets/${ticket.ticket_id}`}>View ticket</Link>
+          <Link
+            className="w-full text-center"
+            href={`/tickets/${ticket.ticket_id}`}
+          >
+            View ticket
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

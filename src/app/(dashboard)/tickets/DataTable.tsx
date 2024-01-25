@@ -124,11 +124,9 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder="Filter Creator..."
           className="max-w-sm"
-          value={
-            (table.getColumn('user_fullName')?.getFilterValue() as string) ?? ''
-          }
+          value={(table.getColumn('creator')?.getFilterValue() as string) ?? ''}
           onChange={event =>
-            table.getColumn('user_fullName')?.setFilterValue(event.target.value)
+            table.getColumn('creator')?.setFilterValue(event.target.value)
           }
         />
         <DropdownMenu>

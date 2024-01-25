@@ -122,7 +122,12 @@ export const columns: ColumnDef<TicketData>[] = [
     },
   },
   {
-    accessorKey: 'user_fullName',
+    accessorKey: 'creator',
+    accessorFn: row => {
+      return row.user_fullName === 'null null' || !row.user_fullName
+        ? row.user_email
+        : row.user_fullName;
+    },
     header: ({ column }) => {
       return (
         <ColumnHeader
@@ -137,7 +142,11 @@ export const columns: ColumnDef<TicketData>[] = [
       const ticket = row.original;
 
       return (
-        <DataTableColumnsCell>{ticket.user_fullName}</DataTableColumnsCell>
+        <DataTableColumnsCell>
+          {ticket.user_fullName === 'null null' || !ticket.user_fullName
+            ? ticket.user_email
+            : ticket.user_fullName}
+        </DataTableColumnsCell>
       );
     },
   },

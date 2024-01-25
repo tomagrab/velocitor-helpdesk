@@ -1,15 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useAuth, useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -24,7 +24,6 @@ import {
   SelectContent,
   SelectValue,
 } from '@/components/ui/select';
-import { useRouter } from 'next/navigation';
 import {
   Popover,
   PopoverContent,
@@ -39,11 +38,15 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
+import { addTicket } from './actions';
+import { Company } from '@/lib/Types/Company/Company';
 
-const createTicketFormSchema = z.object({
-  branch_id: z.string(),
-  user_fullName: z.string(),
-  user_email: z.string().email(),
+type CreateTicketFormProps = {
+  companies: Company[];
+};
+
+export const createTicketFormSchema = z.object({
+  branch_id: z.string().min(1, { message: 'Please select a branch' }),
   status: z.enum(['Open', 'Closed']),
   priority: z.enum(['low', 'medium', 'high']),
   notes: z
@@ -56,114 +59,63 @@ const createTicketFormSchema = z.object({
     }),
 });
 
-export default function CreateTicketForm() {
-  const router = useRouter();
-  const { isLoaded, isSignedIn, user } = useUser();
+export default function CreateTicketForm({ companies }: CreateTicketFormProps) {
   const [loading, setLoading] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
     null,
   );
-  const [companies, setCompanies] = useState<
-    Database['public']['Tables']['companies']['Row'][]
-  >([]);
-
   const [branches, setBranches] = useState<
     Database['public']['Tables']['branches']['Row'][]
   >([]);
   const { getToken } = useAuth();
 
-  const handleCompanyChange = (value: string) => {
-    setSelectedCompanyId(Number(value));
-  };
+  const handleCompanyChange = async (value: string) => {
+    const companyId = Number(value);
+    setSelectedCompanyId(companyId);
 
-  const createTicketForm = useForm<z.infer<typeof createTicketFormSchema>>({
-    resolver: zodResolver(createTicketFormSchema),
-    defaultValues: {
-      user_fullName: '',
-      user_email: '',
-      status: 'Open',
-      priority: 'low',
-      notes: '',
-    },
-  });
-
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      const supabaseAccessToken = await getToken({ template: 'supabase' });
-      if (!supabaseAccessToken) {
-        console.error('Failed to get access token');
-        return;
-      }
-      const supabase = await supabaseClient(supabaseAccessToken);
-      const { data } = await supabase.from('companies').select('*');
-      setCompanies(data || []);
-    };
-
-    fetchCompanies();
-  }, [getToken]);
-
-  useEffect(() => {
-    if (selectedCompanyId) {
-      const getBranches = async () => {
+    if (companyId) {
+      try {
         const supabaseAccessToken = await getToken({ template: 'supabase' });
         if (!supabaseAccessToken) {
           console.error('Failed to get access token');
           return;
         }
         const supabase = await supabaseClient(supabaseAccessToken);
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('branches')
           .select('*')
-          .eq('company_id', selectedCompanyId);
+          .eq('company_id', companyId);
+        if (error) {
+          console.error(error);
+          return;
+        }
+
         setBranches(data || []);
-      };
-
-      getBranches();
+      } catch (error) {
+        console.error(
+          `Failed to get branches for company ${companyId}: \n${error}`,
+        );
+      }
+    } else {
+      setBranches([]);
     }
-  }, [selectedCompanyId, getToken]);
+  };
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn && user) {
-      const fullName = user.fullName || '';
-      const email = user.emailAddresses[0]?.emailAddress || '';
-
-      createTicketForm.reset({
-        ...createTicketForm.getValues(),
-        user_fullName: fullName,
-        user_email: email,
-      });
-    }
-  }, [isLoaded, isSignedIn, user, createTicketForm]);
+  const createTicketForm = useForm<z.infer<typeof createTicketFormSchema>>({
+    resolver: zodResolver(createTicketFormSchema),
+    defaultValues: {
+      branch_id: '',
+      status: 'Open',
+      priority: 'low',
+      notes: '',
+    },
+  });
 
   const handleSubmit = async (
     values: z.infer<typeof createTicketFormSchema>,
   ) => {
     setLoading(true);
-    const supabaseAccessToken = await getToken({ template: 'supabase' });
-    if (!supabaseAccessToken) {
-      console.error('Failed to get access token');
-      return;
-    }
-    const supabase = await supabaseClient(supabaseAccessToken);
-
-    const { data, error } = await supabase.from('tickets').insert([
-      {
-        ...values,
-        user_id: user?.id,
-        user_fullName: user?.fullName,
-        user_email: user?.emailAddresses[0]?.emailAddress,
-        branch_id: Number(values.branch_id),
-      },
-    ]);
-
-    if (error) throw error;
-
-    // Send user to the ticket page if successful
-    if (!error) {
-      router.refresh();
-      router.push(`/tickets`);
-    }
-
+    await addTicket(values);
     setLoading(false);
   };
 
@@ -171,7 +123,7 @@ export default function CreateTicketForm() {
     <Form {...createTicketForm}>
       <form onSubmit={createTicketForm.handleSubmit(handleSubmit)}>
         <FormItem>
-          <FormLabel htmlFor="company">Company:</FormLabel>
+          <FormLabel htmlFor="company">Company</FormLabel>
           <Select
             onValueChange={handleCompanyChange}
             defaultValue={selectedCompanyId?.toString()}
@@ -257,7 +209,7 @@ export default function CreateTicketForm() {
         <FormField
           control={createTicketForm.control}
           name="status"
-          disabled={!isSignedIn || !isLoaded || loading}
+          disabled={loading}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Status</FormLabel>
@@ -280,10 +232,10 @@ export default function CreateTicketForm() {
         <FormField
           control={createTicketForm.control}
           name="priority"
-          disabled={!isSignedIn || !isLoaded || loading}
+          disabled={loading}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>Priority</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -304,7 +256,7 @@ export default function CreateTicketForm() {
         <FormField
           control={createTicketForm.control}
           name="notes"
-          disabled={!isSignedIn || !isLoaded || loading}
+          disabled={loading}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Notes</FormLabel>

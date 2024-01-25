@@ -48,8 +48,6 @@ export default async function TicketDetails({
 }: TicketDetailsProps) {
   const ticket: TicketData = (await getTicket(Number(id))) as TicketData;
 
-  console.log(ticket);
-
   return (
     <main>
       <h1>Ticket Details</h1>

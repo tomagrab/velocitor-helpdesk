@@ -22,6 +22,7 @@ const getTickets = async () => {
             status,
             priority,
             user_fullName,
+            user_email,
             branches:branches!inner(branch_name, companies:companies!inner(company_name))
       `,
   );
@@ -40,7 +41,7 @@ export default async function Tickets() {
       <div className="flex flex-row items-center justify-between pb-4">
         <div className="flex flex-row items-baseline gap-2">
           <h2>Tickets</h2>
-          <h3>Currently open tickets</h3>
+          <h3>Current tickets</h3>
         </div>
 
         <Link href="/tickets/create">

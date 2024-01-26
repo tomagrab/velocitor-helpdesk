@@ -108,7 +108,8 @@ export default async function Dashboard() {
         <h2>Dashboard</h2>
         {assignedTickets.length > 0 && assignedTickets.length != 1 ? (
           <h3>
-            You have <b>{assignedTickets.length}</b> assignedTickets
+            You have <b>{assignedTickets.length + ownedTickets.length}</b>{' '}
+            tickets
           </h3>
         ) : assignedTickets.length === 1 ? (
           <h3>

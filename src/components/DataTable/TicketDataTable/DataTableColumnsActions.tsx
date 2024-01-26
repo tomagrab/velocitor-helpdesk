@@ -35,6 +35,22 @@ export default function DataTableColumnsActions({
             View ticket
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            className="w-full text-center"
+            href={`/companies/${ticket.branches.company_id}`}
+          >
+            View company
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link
+            className="w-full text-center"
+            href={`/branches/${ticket.branches.branch_id}`}
+          >
+            View branch
+          </Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

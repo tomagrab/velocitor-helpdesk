@@ -8,7 +8,9 @@ export type TicketData = {
   notes: string | null;
   created_at: string | null;
   branches: {
+    branch_id: number;
     branch_name: string;
+    company_id: number;
     companies: {
       company_name: string;
     };

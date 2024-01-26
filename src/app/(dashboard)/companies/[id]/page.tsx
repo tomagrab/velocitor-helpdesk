@@ -82,7 +82,7 @@ const getTicketsForCompany = async (id: number) => {
             assigned_to,
             owned_by,
             created_at,
-            branches:branches!inner(branch_name, 
+            branches:branches!inner(branch_name, branch_id, company_id,
             companies:companies!inner(company_name))
   `,
     )

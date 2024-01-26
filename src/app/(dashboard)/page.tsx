@@ -31,7 +31,7 @@ const getAssignedTickets = async (userId: string) => {
             assigned_to,
             owned_by,
             created_at,
-            branches:branches!inner(branch_name, companies:companies!inner(company_name))
+            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
       `,
     )
     .eq('assigned_to', userId);
@@ -65,7 +65,7 @@ const getOwnedTickets = async (userId: string) => {
             assigned_to,
             owned_by,
             created_at,
-            branches:branches!inner(branch_name, companies:companies!inner(company_name))
+            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
       `,
     )
     .eq('owned_by', userId);
@@ -101,7 +101,6 @@ export default async function Dashboard() {
   const ownedTickets: TicketData[] = (await getOwnedTickets(
     userId,
   )) as TicketData[];
-
   return (
     <main>
       <div className="flex flex-row items-baseline gap-2">

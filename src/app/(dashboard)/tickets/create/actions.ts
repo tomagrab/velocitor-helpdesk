@@ -13,9 +13,6 @@ export async function addTicket(
 ) {
   const { userId, getToken } = auth();
   const user = await currentUser();
-  const user_fullName = user?.firstName + ' ' + user?.lastName;
-  const user_email = user?.emailAddresses[0]?.emailAddress;
-  const username = user?.username;
 
   if (!userId) {
     throw new Error('Not authenticated');
@@ -38,8 +35,8 @@ export async function addTicket(
     {
       ...values,
       user_id: user?.id,
-      user_fullName: user_fullName,
-      user_email: user_email,
+      assigned_to: values.assigned_to,
+      owned_by: values.owned_by,
       branch_id: Number(values.branch_id),
     },
   ]);

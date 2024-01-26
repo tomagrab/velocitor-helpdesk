@@ -26,12 +26,14 @@ const getTicket = async (id: number) => {
     .from('tickets')
     .select(
       `
-            ticket_id,
-            status,
-            priority,
-            user_fullName,
-            notes,
-            branches:branches!inner(branch_name, companies:companies!inner(company_name))
+        ticket_id,
+        status,
+        priority,
+        user_id,
+        assigned_to,
+        owned_by,
+        created_at,
+        branches:branches!inner(branch_name, companies:companies!inner(company_name))
       `,
     )
     .eq('ticket_id', id);

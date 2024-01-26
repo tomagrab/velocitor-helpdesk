@@ -151,6 +151,58 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
       );
     },
   },
+  {
+    accessorKey: 'owned_by',
+    accessorFn: row =>
+      users.find(user => user.id === row.owned_by)?.emailAddresses[0]
+        .emailAddress,
+
+    header: ({ column }) => {
+      return (
+        <ColumnHeader
+          title="Owned By"
+          clickEvent={() =>
+            column.toggleSorting(column.getIsSorted() === 'asc')
+          }
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const ticket = row.original;
+
+      return (
+        <DataTableColumnsCell>
+          {
+            users.find(user => user.id === ticket.owned_by)?.emailAddresses[0]
+              .emailAddress
+          }
+        </DataTableColumnsCell>
+      );
+    },
+  },
+  {
+    accessorKey: 'created_at',
+    accessorFn: row => new Date(row.created_at as string).toLocaleString(),
+    header: ({ column }) => {
+      return (
+        <ColumnHeader
+          title="Created At"
+          clickEvent={() =>
+            column.toggleSorting(column.getIsSorted() === 'asc')
+          }
+        />
+      );
+    },
+    cell: ({ row }) => {
+      const ticket = row.original;
+
+      return (
+        <DataTableColumnsCell>
+          {new Date(ticket.created_at as string).toLocaleString()}
+        </DataTableColumnsCell>
+      );
+    },
+  },
 
   {
     id: 'actions',

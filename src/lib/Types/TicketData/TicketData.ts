@@ -6,6 +6,7 @@ export type TicketData = {
   assigned_to: string | null;
   owned_by: string | null;
   notes: string | null;
+  created_at: string | null;
   branches: {
     branch_name: string;
     companies: {

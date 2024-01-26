@@ -3,10 +3,14 @@
 import { usePathname } from 'next/navigation';
 import NavbarLink from './NavbarLink/NavbarLink';
 
-export default function NavbarLinks() {
+type NavbarLinksProps = {
+  className?: string;
+};
+
+export default function NavbarLinks({ className }: NavbarLinksProps) {
   const pathname = usePathname();
   return (
-    <div className={`flex flex-row items-center gap-2`}>
+    <div className={className}>
       <NavbarLink href="/" pathname={pathname} title="Dashboard" />
       <NavbarLink href="/tickets" pathname={pathname} title="Tickets" />
       <NavbarLink href="/companies" pathname={pathname} title="Companies" />

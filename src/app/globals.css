@@ -77,7 +77,7 @@
   }
 
   nav {
-    @apply justify-between border-b-2 border-slate-500 pb-4;
+    @apply justify-between border-b-2 border-[#3097b9] pb-4 shadow-lg;
   }
 
   nav,

@@ -63,8 +63,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-2 py-4">
+    <div className="shadow-md">
+      <div className="grid grid-cols-3 grid-rows-3 gap-2 py-4 md:flex md:flex-row md:items-center md:justify-between">
         <Input
           placeholder="Filter Ticket #..."
           className="max-w-sm"
@@ -129,6 +129,26 @@ export function DataTable<TData, TValue>({
           }
           onChange={event =>
             table.getColumn('assigned_to')?.setFilterValue(event.target.value)
+          }
+        />
+        <Input
+          placeholder="Filter Owned By..."
+          className="max-w-sm"
+          value={
+            (table.getColumn('owned_by')?.getFilterValue() as string) ?? ''
+          }
+          onChange={event =>
+            table.getColumn('owned_by')?.setFilterValue(event.target.value)
+          }
+        />
+        <Input
+          placeholder="Filter Created At..."
+          className="max-w-sm"
+          value={
+            (table.getColumn('created_at')?.getFilterValue() as string) ?? ''
+          }
+          onChange={event =>
+            table.getColumn('created_at')?.setFilterValue(event.target.value)
           }
         />
         <DropdownMenu>

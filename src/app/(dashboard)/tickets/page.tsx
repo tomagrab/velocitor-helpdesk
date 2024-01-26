@@ -25,6 +25,7 @@ const getTickets = async () => {
             user_id,
             assigned_to,
             owned_by,
+            created_at,
             branches:branches!inner(branch_name, companies:companies!inner(company_name))
       `,
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Form,
   FormControl,
@@ -40,9 +40,11 @@ import {
 import { cn } from '@/lib/utils';
 import { addTicket } from './actions';
 import { Company } from '@/lib/Types/Company/Company';
+import { User } from '@clerk/nextjs/server';
 
 type CreateTicketFormProps = {
   companies: Company[];
+  users: User[];
 };
 
 export const createTicketFormSchema = z.object({
@@ -57,9 +59,14 @@ export const createTicketFormSchema = z.object({
     .max(1000, {
       message: 'Please enter no more than 1000 characters',
     }),
+  assigned_to: z.string().min(1, { message: 'Please select a user' }),
+  owned_by: z.string().min(1, { message: 'Please select a user' }),
 });
 
-export default function CreateTicketForm({ companies }: CreateTicketFormProps) {
+export default function CreateTicketForm({
+  companies,
+  users,
+}: CreateTicketFormProps) {
   const [loading, setLoading] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
     null,
@@ -108,6 +115,8 @@ export default function CreateTicketForm({ companies }: CreateTicketFormProps) {
       status: 'Open',
       priority: 'low',
       notes: '',
+      assigned_to: '',
+      owned_by: '',
     },
   });
 
@@ -263,6 +272,66 @@ export default function CreateTicketForm({ companies }: CreateTicketFormProps) {
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={createTicketForm.control}
+          name="assigned_to"
+          disabled={loading}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Assigned To</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a User" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {users.map(user => (
+                    <SelectItem
+                      key={user.id}
+                      value={user.id}
+                      disabled={user.id === 'ckv2w4v9m0000j5m9a0l2k9zj'}
+                    >
+                      {user.emailAddresses[0].emailAddress}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={createTicketForm.control}
+          name="owned_by"
+          disabled={loading}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Owned By</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a User" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {users.map(user => (
+                    <SelectItem
+                      key={user.id}
+                      value={user.id}
+                      disabled={user.id === 'ckv2w4v9m0000j5m9a0l2k9zj'}
+                    >
+                      {user.emailAddresses[0].emailAddress}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

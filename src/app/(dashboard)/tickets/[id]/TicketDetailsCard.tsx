@@ -1,12 +1,18 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
+import { clerkClient } from '@clerk/nextjs/server';
 
 type TicketDetailsProps = {
   ticket: TicketData;
 };
 
-export default function TicketDetailsCard({ ticket }: TicketDetailsProps) {
+export default async function TicketDetailsCard({
+  ticket,
+}: TicketDetailsProps) {
+  const assigned_to = await clerkClient.users.getUser(ticket.assigned_to!);
+  const owned_by = await clerkClient.users.getUser(ticket.owned_by!);
+
   return (
     <Card className="max-w-2xl ">
       <CardHeader className="relative">
@@ -25,7 +31,7 @@ export default function TicketDetailsCard({ ticket }: TicketDetailsProps) {
           <p>{ticket.notes}</p>
         </div>
         <div className="flex justify-between pt-4">
-          <Badge>{ticket?.user_fullName}</Badge>
+          <Badge>{assigned_to.emailAddresses[0].emailAddress}</Badge>
           <Badge className={`priority ${ticket.priority}`}>
             {ticket?.priority}
           </Badge>

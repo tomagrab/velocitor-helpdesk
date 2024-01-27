@@ -1,5 +1,6 @@
 export type TicketData = {
   ticket_id: number;
+  branch_id: number;
   status: string | null;
   priority: string | null;
   user_id: string | null;
@@ -13,6 +14,7 @@ export type TicketData = {
     company_id: number;
     companies: {
       company_name: string;
+      company_id: number;
     };
   };
 };

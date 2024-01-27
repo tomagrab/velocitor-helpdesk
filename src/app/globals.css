@@ -77,7 +77,7 @@
   }
 
   nav {
-    @apply justify-between border-b-2 border-[#3097b9] pb-4 shadow-lg;
+    @apply justify-center gap-2 border-b-2 border-[#3097b9] pb-4 shadow-lg md:justify-between md:gap-0;
   }
 
   nav,

@@ -105,20 +105,22 @@ export default async function Dashboard() {
     <main>
       <div className="flex flex-row items-baseline gap-2">
         <h2>Dashboard</h2>
-        {assignedTickets.length > 0 && assignedTickets.length != 1 ? (
+        {assignedTickets.length > 1 && ownedTickets.length > 1 ? (
           <h3>
-            You have <b>{assignedTickets.length + ownedTickets.length}</b>{' '}
-            tickets
+            You have <b>{ownedTickets.length}</b> owned tickets and{' '}
+            <b>{assignedTickets.length}</b> assigned tickets
           </h3>
-        ) : assignedTickets.length === 1 ? (
+        ) : assignedTickets.length > 1 ? (
           <h3>
-            You have <b>1</b> ticket
+            You have <b>{assignedTickets.length}</b> assigned tickets
           </h3>
-        ) : assignedTickets.length === 0 ? (
+        ) : ownedTickets.length > 1 ? (
           <h3>
-            You have <b>0</b> assignedTickets
+            You have <b>{ownedTickets.length}</b> owned tickets
           </h3>
-        ) : null}
+        ) : (
+          <h3>You have no tickets</h3>
+        )}
       </div>
 
       <Accordion type="single" collapsible className="w-full p-4 shadow-lg">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import {
   Form,
   FormControl,
@@ -38,16 +38,20 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
-import { addTicket } from './actions';
 import { Company } from '@/lib/Types/Company/Company';
 import { User } from '@clerk/nextjs/server';
+import { TicketData } from '@/lib/Types/TicketData/TicketData';
+import { updateTicket } from './actions';
 
-type CreateTicketFormProps = {
+type EditTicketFormProps = {
   companies: Company[];
   users: User[];
+  ticket: TicketData;
+  editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
 };
 
-export const createTicketFormSchema = z.object({
+export const editTicketFormSchema = z.object({
   branch_id: z.string().min(1, { message: 'Please select a branch' }),
   status: z.enum(['Open', 'Closed']),
   priority: z.enum(['low', 'medium', 'high']),
@@ -63,18 +67,75 @@ export const createTicketFormSchema = z.object({
   owned_by: z.string().min(1, { message: 'Please select a user' }),
 });
 
-export default function CreateTicketForm({
+export default function EditTicketForm({
   companies,
   users,
-}: CreateTicketFormProps) {
+  ticket,
+  editMode,
+  setEditMode,
+}: EditTicketFormProps) {
   const [loading, setLoading] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
-    null,
+    ticket.branches.companies.company_id || null,
   );
   const [branches, setBranches] = useState<
     Database['public']['Tables']['branches']['Row'][]
   >([]);
+
+  const editTicketForm = useForm<z.infer<typeof editTicketFormSchema>>({
+    resolver: zodResolver(editTicketFormSchema),
+    defaultValues: {
+      branch_id: ticket.branch_id.toString(),
+      status: ticket.status! as 'Open' | 'Closed',
+      priority: ticket.priority! as 'low' | 'medium' | 'high',
+      notes: ticket.notes!,
+      assigned_to: ticket.assigned_to!,
+      owned_by: ticket.owned_by!,
+    },
+  });
+
   const { getToken } = useAuth();
+
+  // Get branches for selected company
+  useEffect(() => {
+    const getBranches = async () => {
+      try {
+        const supabaseAccessToken = await getToken({ template: 'supabase' });
+        if (!supabaseAccessToken) {
+          console.error('Failed to get access token');
+          return;
+        }
+        const supabase = await supabaseClient(supabaseAccessToken);
+        const { data, error } = await supabase
+          .from('branches')
+          .select('*')
+          .eq('company_id', ticket.branches.companies.company_id);
+        if (error) {
+          console.error(error);
+          return;
+        }
+
+        setBranches(data || []);
+      } catch (error) {
+        console.error(
+          `Failed to get branches for company ${ticket.branches.companies.company_id}: \n${error}`,
+        );
+      }
+    };
+    getBranches();
+  }, [ticket.branches.companies.company_id, getToken]);
+
+  useEffect(() => {
+    // Set default branch value after branches are loaded
+    if (branches.length > 0 && ticket.branch_id) {
+      const branchExists = branches.some(
+        branch => branch.branch_id === ticket.branch_id,
+      );
+      if (branchExists) {
+        editTicketForm.setValue('branch_id', ticket.branch_id.toString());
+      }
+    }
+  }, [branches, ticket, editTicketForm]);
 
   const handleCompanyChange = async (value: string) => {
     const companyId = Number(value);
@@ -108,34 +169,28 @@ export default function CreateTicketForm({
     }
   };
 
-  const createTicketForm = useForm<z.infer<typeof createTicketFormSchema>>({
-    resolver: zodResolver(createTicketFormSchema),
-    defaultValues: {
-      branch_id: '',
-      status: 'Open',
-      priority: 'low',
-      notes: '',
-      assigned_to: '',
-      owned_by: '',
-    },
-  });
-
-  const handleSubmit = async (
-    values: z.infer<typeof createTicketFormSchema>,
-  ) => {
+  const handleSubmit = async (values: z.infer<typeof editTicketFormSchema>) => {
     setLoading(true);
-    await addTicket(values);
+    await updateTicket(ticket.ticket_id, values);
     setLoading(false);
+    setEditMode(false);
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
   };
 
   return (
-    <Form {...createTicketForm}>
-      <form onSubmit={createTicketForm.handleSubmit(handleSubmit)}>
+    <Form {...editTicketForm}>
+      <form onSubmit={editTicketForm.handleSubmit(handleSubmit)}>
         <FormItem>
           <FormLabel htmlFor="company">Company</FormLabel>
           <Select
             onValueChange={handleCompanyChange}
-            defaultValue={selectedCompanyId?.toString()}
+            defaultValue={
+              ticket.branches.companies.company_id?.toString() ||
+              selectedCompanyId?.toString()
+            }
           >
             <FormControl>
               <SelectTrigger>
@@ -156,7 +211,7 @@ export default function CreateTicketForm({
         </FormItem>
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="branch_id"
           render={({ field }) => (
             <FormItem className="flex flex-col">
@@ -189,7 +244,7 @@ export default function CreateTicketForm({
                           value={branch.branch_name as string}
                           key={branch.branch_id}
                           onSelect={() => {
-                            createTicketForm.setValue(
+                            editTicketForm.setValue(
                               'branch_id',
                               branch.branch_id.toString(),
                             );
@@ -216,7 +271,7 @@ export default function CreateTicketForm({
         />
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="status"
           disabled={loading}
           render={({ field }) => (
@@ -239,7 +294,7 @@ export default function CreateTicketForm({
         />
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="priority"
           disabled={loading}
           render={({ field }) => (
@@ -263,7 +318,7 @@ export default function CreateTicketForm({
         />
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="notes"
           disabled={loading}
           render={({ field }) => (
@@ -278,7 +333,7 @@ export default function CreateTicketForm({
         />
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="assigned_to"
           disabled={loading}
           render={({ field }) => (
@@ -308,7 +363,7 @@ export default function CreateTicketForm({
         />
 
         <FormField
-          control={createTicketForm.control}
+          control={editTicketForm.control}
           name="owned_by"
           disabled={loading}
           render={({ field }) => (
@@ -338,7 +393,14 @@ export default function CreateTicketForm({
         />
 
         <Button type="submit" disabled={loading}>
-          {loading ? 'Creating...' : 'Create'}
+          {loading ? 'Updating...' : 'Update'}
+        </Button>
+        <Button
+          className="bg-yellow-500 hover:bg-yellow-400"
+          onClick={handleCancel}
+          disabled={loading}
+        >
+          Cancel
         </Button>
       </form>
     </Form>

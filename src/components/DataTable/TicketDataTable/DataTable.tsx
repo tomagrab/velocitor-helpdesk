@@ -37,13 +37,26 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
+const defaultColumnVisibility: VisibilityState = {
+  ticket_id: true,
+  branches_branch_name: true,
+  branches_companies: true,
+  status: true,
+  priority: true,
+  assigned_to: true,
+  owned_by: false,
+  created_at: false,
+};
+
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    defaultColumnVisibility,
+  );
 
   const table = useReactTable({
     data,
@@ -177,7 +190,13 @@ export function DataTable<TData, TValue>({
                           ? 'Company'
                           : column.id === 'user_fullName'
                             ? 'Creator'
-                            : column.id}
+                            : column.id === 'assigned_to'
+                              ? 'Assigned To'
+                              : column.id === 'owned_by'
+                                ? 'Owned By'
+                                : column.id === 'created_at'
+                                  ? 'Created At'
+                                  : column.id}
                   </DropdownMenuCheckboxItem>
                 );
               })}

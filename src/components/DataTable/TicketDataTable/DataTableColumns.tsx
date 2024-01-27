@@ -7,6 +7,7 @@ import DataTableColumnsActions from './DataTableColumnsActions';
 import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
 import { User } from '@clerk/nextjs/server';
+import Link from 'next/link';
 
 export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
   {
@@ -27,7 +28,11 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
     cell: ({ row }) => {
       const ticket = row.original;
 
-      return <DataTableColumnsCell>{ticket.ticket_id}</DataTableColumnsCell>;
+      return (
+        <DataTableColumnsCell>
+          <Link href={`/tickets/${ticket.ticket_id}`}>{ticket.ticket_id}</Link>
+        </DataTableColumnsCell>
+      );
     },
   },
   {
@@ -48,7 +53,9 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          {ticket.branches.branch_name}
+          <Link href={`/branches/${ticket.branches.branch_id}`}>
+            <Badge>{ticket.branches.branch_name}</Badge>
+          </Link>
         </DataTableColumnsCell>
       );
     },
@@ -71,7 +78,9 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          {ticket.branches.companies.company_name}
+          <Link href={`/companies/${ticket.branches.company_id}`}>
+            <Badge>{ticket.branches.companies.company_name}</Badge>
+          </Link>
         </DataTableColumnsCell>
       );
     },

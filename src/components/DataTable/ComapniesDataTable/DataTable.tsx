@@ -64,10 +64,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-2 py-4">
+      <div className="grid grid-cols-1 gap-2 py-4 md:grid-cols-3">
         <Input
           placeholder="Filter Company ID..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('company_id')?.getFilterValue() as string) ?? ''
           }
@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Company Name..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('company_name')?.getFilterValue() as string) ?? ''
           }
@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="">
               Columns
             </Button>
           </DropdownMenuTrigger>

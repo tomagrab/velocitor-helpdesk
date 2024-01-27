@@ -10,7 +10,7 @@ type NavbarLinksProps = {
 export default function NavbarLinks({ className }: NavbarLinksProps) {
   const pathname = usePathname();
   return (
-    <div className={className}>
+    <div className={`${className} gap-2`}>
       <NavbarLink href="/" pathname={pathname} title="Dashboard" />
       <NavbarLink href="/tickets" pathname={pathname} title="Tickets" />
       <NavbarLink href="/companies" pathname={pathname} title="Companies" />

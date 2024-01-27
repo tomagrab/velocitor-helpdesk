@@ -77,10 +77,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="shadow-md">
-      <div className="grid grid-cols-3 grid-rows-3 gap-2 py-4 md:flex md:flex-row md:items-center md:justify-between">
+      <div className="grid grid-cols-3 gap-2 py-4 md:grid-cols-9">
         <Input
           placeholder="Filter Ticket #..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('ticket_id')?.getFilterValue() as string) ?? ''
           }
@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Branch..."
-          className="max-w-sm"
+          className=""
           value={
             (table
               .getColumn('branches_branch_name')
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Company..."
-          className="max-w-sm"
+          className=""
           value={
             (table
               .getColumn('branches_companies.company_name')
@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Status..."
-          className="max-w-sm"
+          className=""
           value={(table.getColumn('status')?.getFilterValue() as string) ?? ''}
           onChange={event =>
             table.getColumn('status')?.setFilterValue(event.target.value)
@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Priority..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('priority')?.getFilterValue() as string) ?? ''
           }
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Assigned To..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('assigned_to')?.getFilterValue() as string) ?? ''
           }
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Owned By..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('owned_by')?.getFilterValue() as string) ?? ''
           }
@@ -156,7 +156,7 @@ export function DataTable<TData, TValue>({
         />
         <Input
           placeholder="Filter Created At..."
-          className="max-w-sm"
+          className=""
           value={
             (table.getColumn('created_at')?.getFilterValue() as string) ?? ''
           }
@@ -166,7 +166,7 @@ export function DataTable<TData, TValue>({
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="">
               Columns
             </Button>
           </DropdownMenuTrigger>

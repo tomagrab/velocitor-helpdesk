@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
+import Navbar from '@/components/Layout/Navbar/Navbar';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,7 +24,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${roboto.className}`}>{children}</body>
+        <body className={`${roboto.className}`}>
+          <Navbar />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

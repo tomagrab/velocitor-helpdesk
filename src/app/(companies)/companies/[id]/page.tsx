@@ -8,33 +8,10 @@ import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth } from '@clerk/nextjs';
 import { clerkClient } from '@clerk/nextjs/server';
 
-type BranchDetailsProps = {
+type CompanyDetailsProps = {
   params: {
     id: string;
   };
-};
-
-const getBranch = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('branches')
-    .select('*')
-    .eq('branch_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data[0] as unknown as Branch) || [];
 };
 
 const getCompany = async (id: number) => {
@@ -60,7 +37,30 @@ const getCompany = async (id: number) => {
   return (data[0] as unknown as Company) || [];
 };
 
-const getTicketsForBranch = async (id: number) => {
+const getBranches = async (id: number) => {
+  const { getToken } = await auth();
+  const supabaseAccessToken = await getToken({ template: 'supabase' });
+
+  if (!supabaseAccessToken) {
+    console.error('No access token found');
+    return;
+  }
+
+  const supabase = await supabaseClient(supabaseAccessToken);
+
+  const { data, error } = await supabase
+    .from('branches')
+    .select('*')
+    .eq('company_id', id);
+
+  if (error) {
+    throw error;
+  }
+
+  return (data as unknown as Branch[]) || [];
+};
+
+const getTicketsForCompany = async (id: number) => {
   const { getToken } = await auth();
   const supabaseAccessToken = await getToken({ template: 'supabase' });
 
@@ -82,45 +82,59 @@ const getTicketsForBranch = async (id: number) => {
             assigned_to,
             owned_by,
             created_at,
-            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-    `,
+            branches:branches!inner(branch_name, branch_id, company_id,
+            companies:companies!inner(company_name))
+  `,
     )
-    .eq('branch_id', id);
+    .eq('branches.company_id', id);
 
   if (error) {
     throw error;
   }
 
-  return (data as unknown as Branch[]) || [];
+  return (data as unknown as TicketData[]) || [];
 };
 
-export default async function BranchDetails({
+export default async function CompanyDetails({
   params: { id },
-}: BranchDetailsProps) {
-  const branch: Branch = (await getBranch(Number(id))) as unknown as Branch;
-  const company: Company = (await getCompany(
-    branch.company_id,
-  )) as unknown as Company;
-  const ticketsForBranch: TicketData[] = (await getTicketsForBranch(
+}: CompanyDetailsProps) {
+  const company: Company = (await getCompany(Number(id))) as unknown as Company;
+  const branches: Branch[] = (await getBranches(
+    Number(id),
+  )) as unknown as Branch[];
+  const ticketsForCompany: TicketData[] = (await getTicketsForCompany(
     Number(id),
   )) as unknown as TicketData[];
   const data = await clerkClient.users.getUserList();
   const users = JSON.parse(JSON.stringify(data));
+  const companyName = company.company_name;
 
   return (
     <main>
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-2">
-          <Badge>{branch.branch_id}</Badge>
-          <h2>{branch.branch_name}</h2>
-        </div>
-        <div className="flex flex-row items-center gap-2">
-          <Badge>{company.company_id}</Badge>
-          <h3>{company.company_name}</h3>
-        </div>
+      <div className="flex flex-row items-center gap-2">
+        <Badge>{company.company_id}</Badge>
+        <h2>{company.company_name}</h2>
       </div>
       <div>
-        <TicketsDataTable tickets={ticketsForBranch} users={users} />
+        <h3>Branches</h3>
+        <BranchesDataTable branches={branches} />
+      </div>
+      <div className="py-4">
+        {ticketsForCompany.length > 0 ? (
+          <h3>
+            {companyName} has <b>{ticketsForCompany.length}</b> tickets
+          </h3>
+        ) : ticketsForCompany.length === 1 ? (
+          <h3>
+            {companyName} has <b>{ticketsForCompany.length}</b> ticket
+          </h3>
+        ) : (
+          <h3>{companyName} has no tickets</h3>
+        )}
+      </div>
+      <div>
+        <h3>Tickets</h3>
+        <TicketsDataTable tickets={ticketsForCompany} users={users} />
       </div>
     </main>
   );

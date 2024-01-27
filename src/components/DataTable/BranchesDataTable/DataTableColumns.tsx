@@ -5,6 +5,8 @@ import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
 import DataTableColumnsActions from './DataTableColumnsActions';
 import { Branch } from '@/lib/Types/Branch/Branch';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 export const columns: ColumnDef<Branch>[] = [
   {
@@ -44,7 +46,15 @@ export const columns: ColumnDef<Branch>[] = [
     cell: ({ row }) => {
       const branch = row.original;
 
-      return <DataTableColumnsCell>{branch.branch_name}</DataTableColumnsCell>;
+      return (
+        <DataTableColumnsCell>
+          <Badge>
+            <Link href={`/branches/${branch.branch_id}`}>
+              {branch.branch_name}
+            </Link>
+          </Badge>
+        </DataTableColumnsCell>
+      );
     },
   },
   {

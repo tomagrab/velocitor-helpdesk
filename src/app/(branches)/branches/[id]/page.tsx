@@ -8,10 +8,33 @@ import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth } from '@clerk/nextjs';
 import { clerkClient } from '@clerk/nextjs/server';
 
-type CompanyDetailsProps = {
+type BranchDetailsProps = {
   params: {
     id: string;
   };
+};
+
+const getBranch = async (id: number) => {
+  const { getToken } = await auth();
+  const supabaseAccessToken = await getToken({ template: 'supabase' });
+
+  if (!supabaseAccessToken) {
+    console.error('No access token found');
+    return;
+  }
+
+  const supabase = await supabaseClient(supabaseAccessToken);
+
+  const { data, error } = await supabase
+    .from('branches')
+    .select('*')
+    .eq('branch_id', id);
+
+  if (error) {
+    throw error;
+  }
+
+  return (data[0] as unknown as Branch) || [];
 };
 
 const getCompany = async (id: number) => {
@@ -37,30 +60,7 @@ const getCompany = async (id: number) => {
   return (data[0] as unknown as Company) || [];
 };
 
-const getBranches = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('branches')
-    .select('*')
-    .eq('company_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as Branch[]) || [];
-};
-
-const getTicketsForCompany = async (id: number) => {
+const getTicketsForBranch = async (id: number) => {
   const { getToken } = await auth();
   const supabaseAccessToken = await getToken({ template: 'supabase' });
 
@@ -82,27 +82,26 @@ const getTicketsForCompany = async (id: number) => {
             assigned_to,
             owned_by,
             created_at,
-            branches:branches!inner(branch_name, branch_id, company_id,
-            companies:companies!inner(company_name))
-  `,
+            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
+    `,
     )
-    .eq('branches.company_id', id);
+    .eq('branch_id', id);
 
   if (error) {
     throw error;
   }
 
-  return (data as unknown as TicketData[]) || [];
+  return (data as unknown as Branch[]) || [];
 };
 
-export default async function CompanyDetails({
+export default async function BranchDetails({
   params: { id },
-}: CompanyDetailsProps) {
-  const company: Company = (await getCompany(Number(id))) as unknown as Company;
-  const branches: Branch[] = (await getBranches(
-    Number(id),
-  )) as unknown as Branch[];
-  const ticketsForCompany: TicketData[] = (await getTicketsForCompany(
+}: BranchDetailsProps) {
+  const branch: Branch = (await getBranch(Number(id))) as unknown as Branch;
+  const company: Company = (await getCompany(
+    branch.company_id,
+  )) as unknown as Company;
+  const ticketsForBranch: TicketData[] = (await getTicketsForBranch(
     Number(id),
   )) as unknown as TicketData[];
   const data = await clerkClient.users.getUserList();
@@ -110,17 +109,33 @@ export default async function CompanyDetails({
 
   return (
     <main>
-      <div className="flex flex-row items-center gap-2">
-        <Badge>{company.company_id}</Badge>
-        <h2>{company.company_name}</h2>
+      <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <Badge>{branch.branch_id}</Badge>
+          <h2>{branch.branch_name}</h2>
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <Badge>{company.company_id}</Badge>
+          <h3>{company.company_name}</h3>
+        </div>
+      </div>
+      <div className="py-4">
+        {ticketsForBranch.length > 0 ? (
+          <h3>
+            {branch.branch_name} has <b>{ticketsForBranch.length}</b> tickets
+          </h3>
+        ) : ticketsForBranch.length === 1 ? (
+          <h3>
+            {branch.branch_name} has <b>{ticketsForBranch.length}</b> ticket
+          </h3>
+        ) : (
+          <h3>
+            {branch.branch_name} has <b>no</b> tickets
+          </h3>
+        )}
       </div>
       <div>
-        <h3>Branches</h3>
-        <BranchesDataTable branches={branches} />
-      </div>
-      <div>
-        <h3>Tickets</h3>
-        <TicketsDataTable tickets={ticketsForCompany} users={users} />
+        <TicketsDataTable tickets={ticketsForBranch} users={users} />
       </div>
     </main>
   );

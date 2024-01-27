@@ -1,5 +1,4 @@
 import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
-import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth, clerkClient } from '@clerk/nextjs';
 import {
@@ -8,74 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
-const getAssignedTickets = async (userId: string) => {
-  const { getToken } = auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('tickets')
-    .select(
-      `
-            ticket_id,
-            status,
-            priority,
-            user_id,
-            assigned_to,
-            owned_by,
-            created_at,
-            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-      `,
-    )
-    .eq('assigned_to', userId);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as TicketData[]) || [];
-};
-
-const getOwnedTickets = async (userId: string) => {
-  const { getToken } = auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('tickets')
-    .select(
-      `
-            ticket_id,
-            status,
-            priority,
-            user_id,
-            assigned_to,
-            owned_by,
-            created_at,
-            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-      `,
-    )
-    .eq('owned_by', userId);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as TicketData[]) || [];
-};
+import { getAssignedTickets } from '@/lib/Utilities/GetAssignedTickets/GetAssignedTickets';
+import { getOwnedTickets } from '@/lib/Utilities/GetOwnedTickets/GetOwnedTickets';
 
 export default async function Dashboard() {
   const { userId } = auth();
@@ -101,6 +34,7 @@ export default async function Dashboard() {
   const ownedTickets: TicketData[] = (await getOwnedTickets(
     userId,
   )) as TicketData[];
+
   return (
     <main>
       <div className="flex flex-row items-baseline gap-2">
@@ -118,28 +52,46 @@ export default async function Dashboard() {
           <h3>
             You have <b>{ownedTickets.length}</b> owned tickets
           </h3>
+        ) : assignedTickets.length === 1 ? (
+          <h3>
+            You have <b>{assignedTickets.length}</b> assigned ticket
+          </h3>
+        ) : ownedTickets.length === 1 ? (
+          <h3>
+            You have <b>{ownedTickets.length}</b> owned ticket
+          </h3>
         ) : (
           <h3>You have no tickets</h3>
         )}
       </div>
 
-      <Accordion type="single" collapsible className="w-full p-4 shadow-lg">
-        {/* Tickets Owned */}
-        <AccordionItem value="item-1">
-          <AccordionTrigger>Tickets Owned</AccordionTrigger>
-          <AccordionContent>
-            <TicketsDataTable tickets={ownedTickets} users={users} />
-          </AccordionContent>
-        </AccordionItem>
+      {/* Tickets Accordion */}
+      {/* Show accordion if either Assigned Tickets or Owned Tickets exist and their length is greater than 0 */}
+      {(assignedTickets && assignedTickets.length > 0) ||
+      (ownedTickets && ownedTickets.length > 0) ? (
+        <Accordion type="single" collapsible className="w-full p-4 shadow-lg">
+          {/* Tickets Owned */}
+          {/* Only show owned tickets  */}
+          {ownedTickets && ownedTickets.length > 0 ? (
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Tickets Owned</AccordionTrigger>
+              <AccordionContent>
+                <TicketsDataTable tickets={ownedTickets} users={users} />
+              </AccordionContent>
+            </AccordionItem>
+          ) : null}
 
-        {/* Tickets Assigned */}
-        <AccordionItem value="item-2">
-          <AccordionTrigger>Tickets Assigned</AccordionTrigger>
-          <AccordionContent>
-            <TicketsDataTable tickets={assignedTickets} users={users} />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+          {/* Tickets Assigned */}
+          {assignedTickets && assignedTickets.length > 0 ? (
+            <AccordionItem value="item-2">
+              <AccordionTrigger>Tickets Assigned</AccordionTrigger>
+              <AccordionContent>
+                <TicketsDataTable tickets={assignedTickets} users={users} />
+              </AccordionContent>
+            </AccordionItem>
+          ) : null}
+        </Accordion>
+      ) : null}
     </main>
   );
 }

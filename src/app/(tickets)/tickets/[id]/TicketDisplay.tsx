@@ -26,15 +26,13 @@ export default function TicketDisplay({
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       {!editMode ? (
-        <div className="flex flex-col items-center justify-center">
-          <TicketDetailsCard
-            ticket={ticket}
-            assigned_to={assigned_to}
-            owned_by={owned_by}
-            editMode={editMode}
-            setEditMode={setEditMode}
-          />
-        </div>
+        <TicketDetailsCard
+          ticket={ticket}
+          assigned_to={assigned_to}
+          owned_by={owned_by}
+          editMode={editMode}
+          setEditMode={setEditMode}
+        />
       ) : (
         <EditTicketForm
           companies={companies}

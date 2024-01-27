@@ -8,6 +8,7 @@ import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
 import { User } from '@clerk/nextjs/server';
 import Link from 'next/link';
+import { ChevronsDown, ChevronsRight, ChevronsUp } from 'lucide-react';
 
 export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
   {
@@ -125,7 +126,19 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
       return (
         <DataTableColumnsCell>
           <Badge className={`priority ${ticket.priority}`}>
-            {ticket.priority}
+            {ticket.priority === 'low' ? (
+              <>
+                <ChevronsDown size={16} /> {ticket.priority}{' '}
+              </>
+            ) : ticket.priority === 'medium' ? (
+              <>
+                <ChevronsRight size={16} /> {ticket.priority}
+              </>
+            ) : (
+              <>
+                <ChevronsUp size={16} /> {ticket.priority}
+              </>
+            )}
           </Badge>
         </DataTableColumnsCell>
       );

@@ -1,6 +1,6 @@
 import { supabaseClient } from '@/lib/Database/Supabase';
 import CreateTicketForm from './CreateTicketForm';
-import { auth } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 import { Company } from '@/lib/Types/Company/Company';
 import { clerkClient } from '@clerk/nextjs/server';
 

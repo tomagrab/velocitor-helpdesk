@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useState } from 'react';
 import {
   Form,
   FormControl,
@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -74,6 +74,7 @@ export default function CreateTicketForm({
   const [branches, setBranches] = useState<
     Database['public']['Tables']['branches']['Row'][]
   >([]);
+  const currentUser = useUser();
   const { getToken } = useAuth();
 
   const handleCompanyChange = async (value: string) => {
@@ -115,8 +116,8 @@ export default function CreateTicketForm({
       status: 'Open',
       priority: 'low',
       notes: '',
-      assigned_to: '',
-      owned_by: '',
+      assigned_to: currentUser.user?.id,
+      owned_by: currentUser.user?.id,
     },
   });
 

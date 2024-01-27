@@ -5,6 +5,8 @@ import ColumnHeader from './DataTableColumnsHeader';
 import DataTableColumnsCell from './DataTableColumnsCell';
 import { Company } from '@/lib/Types/Company/Company';
 import DataTableColumnsActions from './DataTableColumnsActions';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 export const columns: ColumnDef<Company>[] = [
   {
@@ -45,7 +47,13 @@ export const columns: ColumnDef<Company>[] = [
       const company = row.original;
 
       return (
-        <DataTableColumnsCell>{company.company_name}</DataTableColumnsCell>
+        <DataTableColumnsCell>
+          <Badge>
+            <Link href={`/companies/${company.company_id}`}>
+              {company.company_name}
+            </Link>
+          </Badge>
+        </DataTableColumnsCell>
       );
     },
   },

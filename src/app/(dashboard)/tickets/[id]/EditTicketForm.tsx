@@ -172,8 +172,8 @@ export default function EditTicketForm({
   const handleSubmit = async (values: z.infer<typeof editTicketFormSchema>) => {
     setLoading(true);
     await updateTicket(ticket.ticket_id, values);
-    setLoading(false);
     setEditMode(false);
+    setLoading(false);
   };
 
   const handleCancel = () => {

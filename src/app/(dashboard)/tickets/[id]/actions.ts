@@ -34,14 +34,16 @@ export async function updateTicket(
 
   const { error } = await supabase
     .from('tickets')
-    .upsert([
+    .update([
       {
         ...values,
+        assigned_to: values.assigned_to,
+        owned_by: values.owned_by,
         user_id: user?.id,
         branch_id: Number(values.branch_id),
       },
     ])
-    .eq('id', ticketId);
+    .eq('ticket_id', ticketId);
 
   if (error) {
     console.error(error);

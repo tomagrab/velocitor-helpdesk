@@ -34,7 +34,7 @@ export default function Navbar() {
             </span>
           </h1>
 
-          <NavbarLinks className="flex flex-row items-center" />
+          <NavbarLinks className="flex flex-row items-center gap-2" />
         </div>
       </header>
       <NavbarUser />

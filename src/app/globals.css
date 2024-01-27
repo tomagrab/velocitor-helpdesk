@@ -72,12 +72,11 @@
   }
 
   body {
-    @apply bg-background text-foreground md:p-4;
-    @apply p-8 !important;
+    @apply bg-background text-foreground;
   }
 
   nav {
-    @apply justify-center gap-2 border-b-2 border-[#3097b9] pb-4 shadow-lg md:justify-between md:gap-0;
+    @apply justify-center gap-2 p-4 shadow-lg md:justify-between md:gap-0;
   }
 
   nav,
@@ -90,7 +89,7 @@
   }
 
   main {
-    @apply pt-4;
+    @apply p-8;
   }
 
   main,

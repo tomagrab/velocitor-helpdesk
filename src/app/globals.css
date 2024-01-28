@@ -98,7 +98,7 @@
   }
 
   form {
-    @apply mx-auto w-full max-w-md gap-2 rounded-lg p-8 shadow-xl;
+    @apply w-full gap-2 rounded-lg p-8 shadow-xl;
   }
 
   h1 {

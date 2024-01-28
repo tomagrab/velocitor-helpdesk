@@ -1,10 +1,10 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { TicketOwnership } from '@/lib/Types/TicketOwnership/TicketOwnership';
 import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 
 type TicketDetailsProps = {
   ticket: TicketData;
@@ -54,14 +54,32 @@ export default function TicketDetailsCard({
           </div>
         </div>
 
-        <aside className="flex flex-col items-center gap-4 p-4">
+        <aside className="flex flex-col  gap-4 p-4">
+          <div>
+            <p className="font-semibold">Status:</p>
+            <Badge className={`status ${ticket.status}`}>{ticket.status}</Badge>
+          </div>
+
+          <div>
+            <p className="font-semibold">Priority:</p>
+            <Badge className={`priority ${ticket.priority}`}>
+              {ticket.priority}
+            </Badge>
+          </div>
+
           <div>
             <p className="font-semibold">Assigned to:</p>
-            <Badge className="assignee">{assigned_to.email}</Badge>
+            <Badge className="bg-sky-500 hover:bg-sky-400">
+              <Link href={`/users/${assigned_to.id}`}>{assigned_to.email}</Link>
+            </Badge>
           </div>
           <div>
             <p className="font-semibold">Owned by:</p>
-            <Badge className="owner">{owned_by.email}</Badge>
+            <Link href={`/users/${owned_by.id}`}>
+              <Badge className="bg-emerald-500 hover:bg-emerald-400">
+                {owned_by.email}
+              </Badge>
+            </Link>
           </div>
         </aside>
       </div>

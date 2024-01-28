@@ -39,17 +39,16 @@ import {
 } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
 import { Company } from '@/lib/Types/Company/Company';
-import { User, currentUser } from '@clerk/nextjs/server';
+import { User } from '@clerk/nextjs/server';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import { updateTicket } from './actions';
-import { addTicket } from '../create/actions';
+import { addTicket, cancelTicket, updateTicket } from '@/app/api/actions';
 
-type EditTicketFormProps = {
+type TicketFormProps = {
   companies: Company[];
   users: User[];
-  ticket: TicketData;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
+  ticket?: TicketData;
+  editMode?: boolean;
+  setEditMode?: (editMode: boolean) => void;
 };
 
 export const ticketFormSchema = z.object({
@@ -68,16 +67,16 @@ export const ticketFormSchema = z.object({
   owned_by: z.string().min(1, { message: 'Please select a user' }),
 });
 
-export default function EditTicketForm({
+export default function TicketForm({
   companies,
   users,
   ticket,
   editMode,
   setEditMode,
-}: EditTicketFormProps) {
+}: TicketFormProps) {
   const [loading, setLoading] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
-    ticket.branches.companies.company_id || null,
+    ticket?.branches.companies.company_id || null,
   );
   const [branches, setBranches] = useState<
     Database['public']['Tables']['branches']['Row'][]
@@ -87,14 +86,14 @@ export default function EditTicketForm({
   const ticketForm = useForm<z.infer<typeof ticketFormSchema>>({
     resolver: zodResolver(ticketFormSchema),
     defaultValues: {
-      branch_id: ticket.branch_id.toString(),
-      status: (ticket.status as 'Open' | 'Closed') ?? 'Open',
-      priority: (ticket.priority as 'low' | 'medium' | 'high') ?? 'low',
-      notes: ticket.notes ?? '',
-      assigned_to: ticket.assigned_to
-        ? ticket.assigned_to
+      branch_id: ticket?.branch_id.toString(),
+      status: (ticket?.status as 'Open' | 'Closed') ?? 'Open',
+      priority: (ticket?.priority as 'low' | 'medium' | 'high') ?? 'low',
+      notes: ticket?.notes ?? '',
+      assigned_to: ticket?.assigned_to
+        ? ticket?.assigned_to
         : currentUser.user?.id,
-      owned_by: ticket.owned_by ? ticket.owned_by : currentUser.user?.id,
+      owned_by: ticket?.owned_by ? ticket?.owned_by : currentUser.user?.id,
     },
   });
 
@@ -113,7 +112,7 @@ export default function EditTicketForm({
         const { data, error } = await supabase
           .from('branches')
           .select('*')
-          .eq('company_id', ticket.branches.companies.company_id);
+          .eq('company_id', ticket?.branches.companies.company_id);
         if (error) {
           console.error(error);
           return;
@@ -122,21 +121,21 @@ export default function EditTicketForm({
         setBranches(data || []);
       } catch (error) {
         console.error(
-          `Failed to get branches for company ${ticket.branches.companies.company_id}: \n${error}`,
+          `Failed to get branches for company ${ticket?.branches.companies.company_id}: \n${error}`,
         );
       }
     };
     getBranches();
-  }, [ticket.branches.companies.company_id, getToken]);
+  }, [ticket?.branches.companies.company_id, getToken]);
 
   useEffect(() => {
     // Set default branch value after branches are loaded
-    if (branches.length > 0 && ticket.branch_id) {
+    if (branches.length > 0 && ticket?.branch_id) {
       const branchExists = branches.some(
-        branch => branch.branch_id === ticket.branch_id,
+        branch => branch.branch_id === ticket?.branch_id,
       );
       if (branchExists) {
-        ticketForm.setValue('branch_id', ticket.branch_id.toString());
+        ticketForm.setValue('branch_id', ticket?.branch_id.toString());
       }
     }
   }, [branches, ticket, ticketForm]);
@@ -176,8 +175,8 @@ export default function EditTicketForm({
   const handleSubmit = async (values: z.infer<typeof ticketFormSchema>) => {
     setLoading(true);
 
-    if (editMode) {
-      await updateTicket(ticket.ticket_id, values);
+    if (editMode && setEditMode) {
+      await updateTicket(ticket?.ticket_id as number, values);
       setEditMode(false);
     }
 
@@ -188,10 +187,16 @@ export default function EditTicketForm({
     setLoading(false);
   };
 
-  const handleCancel = () => {
-    if (editMode) {
+  const handleReset = () => {
+    ticketForm.reset();
+  };
+
+  const handleCancel = async () => {
+    if (editMode && setEditMode) {
       setEditMode(false);
     }
+
+    await cancelTicket();
   };
 
   return (
@@ -203,7 +208,7 @@ export default function EditTicketForm({
             <Select
               onValueChange={handleCompanyChange}
               defaultValue={
-                ticket.branches.companies.company_id?.toString() ||
+                ticket?.branches.companies.company_id?.toString() ||
                 selectedCompanyId?.toString()
               }
             >
@@ -420,22 +425,33 @@ export default function EditTicketForm({
           )}
         />
 
-        <Button type="submit" disabled={loading}>
-          {loading && editMode
-            ? 'Updating...'
-            : loading && !editMode
-              ? 'Creating...'
-              : editMode
-                ? 'Update'
-                : 'Create'}
-        </Button>
-        <Button
-          className="bg-yellow-500 hover:bg-yellow-400"
-          onClick={handleCancel}
-          disabled={loading}
-        >
-          Cancel
-        </Button>
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
+          <Button type="submit" disabled={loading}>
+            {loading && editMode
+              ? 'Updating...'
+              : loading && !editMode
+                ? 'Creating...'
+                : editMode
+                  ? 'Update'
+                  : 'Create'}
+          </Button>
+          <Button
+            type="button"
+            className="bg-yellow-500 hover:bg-yellow-400"
+            onClick={handleReset}
+            disabled={loading}
+          >
+            Reset
+          </Button>
+          <Button
+            type="button"
+            className="bg-red-500 hover:bg-red-400"
+            onClick={handleCancel}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
     </Form>
   );

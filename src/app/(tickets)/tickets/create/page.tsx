@@ -1,8 +1,8 @@
 import { supabaseClient } from '@/lib/Database/Supabase';
-import CreateTicketForm from './CreateTicketForm';
 import { auth } from '@clerk/nextjs/server';
 import { Company } from '@/lib/Types/Company/Company';
 import { clerkClient } from '@clerk/nextjs/server';
+import TicketForm from '@/components/Layout/Tickets/TicketForm/TicketForm';
 
 const getCompanies = async () => {
   const { getToken } = auth();
@@ -42,7 +42,7 @@ export default async function Create() {
         <h2>Create</h2>
         <h3>Create a new ticket</h3>
       </div>
-      <CreateTicketForm companies={companies} users={users} />
+      <TicketForm companies={companies} users={users} editMode={false} />
     </main>
   );
 }

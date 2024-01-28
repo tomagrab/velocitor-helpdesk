@@ -47,11 +47,18 @@ export default async function UserDetails({ params }: UserDetailsProps) {
           </h3>
         ) : assignedTickets.length > 1 ? (
           <h3>
-            {email} has <b>{assignedTickets.length}</b> assigned tickets
+            {email} has <b>{assignedTickets.length}</b> assigned tickets and{' '}
+            <b>{ownedTickets.length}</b> owned ticket
           </h3>
         ) : ownedTickets.length > 1 ? (
           <h3>
-            {email} has <b>{ownedTickets.length}</b> owned tickets
+            {email} has <b>{ownedTickets.length}</b> owned tickets and{' '}
+            <b>{assignedTickets.length}</b> assigned ticket
+          </h3>
+        ) : assignedTickets.length === 1 && ownedTickets.length === 1 ? (
+          <h3>
+            {email} has <b>{assignedTickets.length}</b> assigned ticket and{' '}
+            <b>{ownedTickets.length}</b> owned ticket
           </h3>
         ) : assignedTickets.length === 1 ? (
           <h3>

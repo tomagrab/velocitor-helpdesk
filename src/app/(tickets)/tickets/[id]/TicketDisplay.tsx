@@ -3,9 +3,9 @@ import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import TicketDetailsCard from './TicketDetailsCard';
 import { useState } from 'react';
 import { TicketOwnership } from '@/lib/Types/TicketOwnership/TicketOwnership';
-import EditTicketForm from './EditTicketForm';
 import { Company } from '@/lib/Types/Company/Company';
 import { User } from '@clerk/nextjs/server';
+import TicketForm from '@/components/Layout/Tickets/TicketForm/TicketForm';
 
 type TicketDetailsProps = {
   ticket: TicketData;
@@ -13,6 +13,7 @@ type TicketDetailsProps = {
   owned_by: TicketOwnership;
   companies: Company[];
   users: User[];
+  editModeQueryParam?: boolean;
 };
 
 export default function TicketDisplay({
@@ -21,8 +22,9 @@ export default function TicketDisplay({
   owned_by,
   companies,
   users,
+  editModeQueryParam,
 }: TicketDetailsProps) {
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(editModeQueryParam || false);
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       {!editMode ? (
@@ -34,7 +36,7 @@ export default function TicketDisplay({
           setEditMode={setEditMode}
         />
       ) : (
-        <EditTicketForm
+        <TicketForm
           companies={companies}
           users={users}
           ticket={ticket}

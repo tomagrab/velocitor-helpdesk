@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
+import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { getAssignedTickets } from '@/lib/Utilities/GetAssignedTickets/GetAssignedTickets';
 import { getOwnedTickets } from '@/lib/Utilities/GetOwnedTickets/GetOwnedTickets';
 

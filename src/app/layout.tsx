@@ -4,8 +4,6 @@ import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import Navbar from '@/components/Layout/Navbar/Navbar';
 
-export const dynamic = 'force-dynamic';
-
 const roboto = Roboto({
   weight: '400',
   subsets: ['latin'],

@@ -1,4 +1,4 @@
-import BranchesDataTable from '@/components/DataTable/BranchesDataTable/BranchesDataTable';
+import BranchesDataTable from '@/components/Layout/DataTable/BranchesDataTable/BranchesDataTable';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { Branch } from '@/lib/Types/Branch/Branch';
 import { auth } from '@clerk/nextjs';

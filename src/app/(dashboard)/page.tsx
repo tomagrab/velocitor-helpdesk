@@ -1,4 +1,4 @@
-import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
+import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth, clerkClient } from '@clerk/nextjs';
 import {
@@ -9,6 +9,12 @@ import {
 } from '@/components/ui/accordion';
 import { getAssignedTickets } from '@/lib/Utilities/GetAssignedTickets/GetAssignedTickets';
 import { getOwnedTickets } from '@/lib/Utilities/GetOwnedTickets/GetOwnedTickets';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Velocitor Helpdesk | Dashboard',
+  description: 'The main Dashboard page of Velocitor Helpdesk.',
+};
 
 export default async function Dashboard() {
   const { userId } = auth();
@@ -81,7 +87,9 @@ export default async function Dashboard() {
           {/* Only show owned tickets  */}
           {ownedTickets && ownedTickets.length > 0 ? (
             <AccordionItem value="item-1">
-              <AccordionTrigger>Tickets Owned</AccordionTrigger>
+              <AccordionTrigger>
+                Tickets Owned - {ownedTickets.length}
+              </AccordionTrigger>
               <AccordionContent>
                 <TicketsDataTable tickets={ownedTickets} users={users} />
               </AccordionContent>
@@ -91,7 +99,9 @@ export default async function Dashboard() {
           {/* Tickets Assigned */}
           {assignedTickets && assignedTickets.length > 0 ? (
             <AccordionItem value="item-2">
-              <AccordionTrigger>Tickets Assigned</AccordionTrigger>
+              <AccordionTrigger>
+                Tickets Assigned - {assignedTickets.length}
+              </AccordionTrigger>
               <AccordionContent>
                 <TicketsDataTable tickets={assignedTickets} users={users} />
               </AccordionContent>

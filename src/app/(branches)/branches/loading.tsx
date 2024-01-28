@@ -1,7 +1,10 @@
+import LoadingDisplay from '@/components/Layout/Loading/LoadingDisplay';
+
 export default function Loading() {
   return (
-    <main className="text-center">
-      <h2 className="text-3xl">Loading Branches...</h2>
-    </main>
+    <LoadingDisplay
+      title={`Branches`}
+      message={`the Velocitor Helpdesk Branches List`}
+    />
   );
 }

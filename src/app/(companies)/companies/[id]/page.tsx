@@ -1,5 +1,5 @@
-import BranchesDataTable from '@/components/DataTable/BranchesDataTable/BranchesDataTable';
-import TicketsDataTable from '@/components/DataTable/TicketDataTable/TicketsDataTable';
+import BranchesDataTable from '@/components/Layout/DataTable/BranchesDataTable/BranchesDataTable';
+import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { Branch } from '@/lib/Types/Branch/Branch';

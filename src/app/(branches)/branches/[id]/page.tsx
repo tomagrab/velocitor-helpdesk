@@ -1,4 +1,3 @@
-import BranchesDataTable from '@/components/Layout/DataTable/BranchesDataTable/BranchesDataTable';
 import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
 import { supabaseClient } from '@/lib/Database/Supabase';
@@ -13,6 +12,18 @@ type BranchDetailsProps = {
     id: string;
   };
 };
+
+export async function generateMetadata({ params: { id } }: BranchDetailsProps) {
+  const branch: Branch = (await getBranch(Number(id))) as unknown as Branch;
+  const company: Company = (await getCompany(
+    branch.company_id,
+  )) as unknown as Company;
+
+  return {
+    title: `Velocitor Helpdesk | ${branch.branch_name}`,
+    description: `The branch ${branch.branch_name} of the company ${company.company_name}.`,
+  };
+}
 
 const getBranch = async (id: number) => {
   const { getToken } = await auth();

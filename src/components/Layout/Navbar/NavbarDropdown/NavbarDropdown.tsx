@@ -13,7 +13,7 @@ const roboto = Roboto({
 export default function NavbarDropdown() {
   return (
     <Popover>
-      <PopoverTrigger asChild className="flex items-center">
+      <PopoverTrigger asChild className="flex cursor-pointer items-center">
         <h1 className="rounded p-2 shadow-md">
           <span className={`velocitor blue ${roboto.className}`}>
             Velocitor

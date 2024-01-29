@@ -6,7 +6,7 @@ import { currentUser } from '@clerk/nextjs';
 import * as z from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { ticketFormSchema } from '@/components/Layout/Tickets/TicketForm/TicketForm';
+import { ticketFormSchema } from '@/components/Layout/Ticket/TicketForm/TicketForm';
 
 export async function updateTicket(
   ticketId: number,

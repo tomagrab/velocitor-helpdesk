@@ -78,6 +78,9 @@ export default function TicketForm({
   const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
     ticket?.branches.companies.company_id || null,
   );
+  const [selectedCompany, setSelectedCompany] = useState<string>(
+    ticket?.branches.companies.company_name || '',
+  );
   const [branches, setBranches] = useState<
     Database['public']['Tables']['branches']['Row'][]
   >([]);
@@ -143,6 +146,10 @@ export default function TicketForm({
   const handleCompanyChange = async (value: string) => {
     const companyId = Number(value);
     setSelectedCompanyId(companyId);
+    setSelectedCompany(
+      companies.find(company => company.company_id === companyId)
+        ?.company_name as string,
+    );
 
     if (companyId) {
       try {
@@ -187,10 +194,6 @@ export default function TicketForm({
     setLoading(false);
   };
 
-  const handleReset = () => {
-    ticketForm.reset();
-  };
-
   const handleCancel = async () => {
     if (editMode && setEditMode) {
       setEditMode(false);
@@ -202,32 +205,51 @@ export default function TicketForm({
   return (
     <Form {...ticketForm}>
       <form onSubmit={ticketForm.handleSubmit(handleSubmit)}>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <FormItem>
-            <FormLabel htmlFor="company">Company</FormLabel>
-            <Select
-              onValueChange={handleCompanyChange}
-              defaultValue={
-                ticket?.branches.companies.company_id?.toString() ||
-                selectedCompanyId?.toString()
-              }
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Company" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {companies.map(company => (
-                  <SelectItem
-                    key={company.company_id}
-                    value={company.company_id.toString()}
+        <div className="grid grid-cols-2 gap-4">
+          <FormItem className="flex flex-col">
+            <FormLabel>Company</FormLabel>
+            <Popover>
+              <PopoverTrigger asChild>
+                <FormControl>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className={cn('justify-between')}
                   >
-                    {company.company_name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                    {selectedCompany || 'Select Company'}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="p-0">
+                <Command>
+                  <CommandInput placeholder="Search company..." />
+                  <CommandEmpty>No company found.</CommandEmpty>
+                  <CommandGroup>
+                    {companies.map(company => (
+                      <CommandItem
+                        value={company.company_name}
+                        key={company.company_id}
+                        onSelect={() =>
+                          handleCompanyChange(company.company_id.toString())
+                        }
+                      >
+                        <Check
+                          className={cn(
+                            'mr-2 h-4 w-4',
+                            company.company_id === selectedCompanyId
+                              ? 'opacity-100'
+                              : 'opacity-0',
+                          )}
+                        />
+                        {company.company_name}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
+            <FormMessage />
           </FormItem>
 
           <FormField
@@ -425,8 +447,21 @@ export default function TicketForm({
           )}
         />
 
-        <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-          <Button type="submit" disabled={loading}>
+        <div className="flex flex-row justify-between gap-2">
+          <Button
+            type="button"
+            className="w-full bg-red-500 hover:bg-red-400 md:max-w-md"
+            onClick={handleCancel}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full md:max-w-md"
+          >
             {loading && editMode
               ? 'Updating...'
               : loading && !editMode
@@ -434,22 +469,6 @@ export default function TicketForm({
                 : editMode
                   ? 'Update'
                   : 'Create'}
-          </Button>
-          <Button
-            type="button"
-            className="bg-yellow-500 hover:bg-yellow-400"
-            onClick={handleReset}
-            disabled={loading}
-          >
-            Reset
-          </Button>
-          <Button
-            type="button"
-            className="bg-red-500 hover:bg-red-400"
-            onClick={handleCancel}
-            disabled={loading}
-          >
-            Cancel
           </Button>
         </div>
       </form>

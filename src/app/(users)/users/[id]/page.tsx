@@ -38,45 +38,12 @@ export default async function UserDetails({ params }: UserDetailsProps) {
   return (
     <main>
       <UserCard user={user} showProfileLink={false} />
-
-      <div className="py-2">
-        {assignedTickets.length > 1 && ownedTickets.length > 1 ? (
-          <h3>
-            {email} has <b>{ownedTickets.length}</b> owned tickets and{' '}
-            <b>{assignedTickets.length}</b> assigned tickets
-          </h3>
-        ) : assignedTickets.length > 1 ? (
-          <h3>
-            {email} has <b>{assignedTickets.length}</b> assigned tickets and{' '}
-            <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : ownedTickets.length > 1 ? (
-          <h3>
-            {email} has <b>{ownedTickets.length}</b> owned tickets and{' '}
-            <b>{assignedTickets.length}</b> assigned ticket
-          </h3>
-        ) : assignedTickets.length === 1 && ownedTickets.length === 1 ? (
-          <h3>
-            {email} has <b>{assignedTickets.length}</b> assigned ticket and{' '}
-            <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : assignedTickets.length === 1 ? (
-          <h3>
-            {email} has <b>{assignedTickets.length}</b> assigned ticket
-          </h3>
-        ) : ownedTickets.length === 1 ? (
-          <h3>
-            {email} has <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : (
-          <h3>{email} has no tickets</h3>
-        )}
-      </div>
-
       <Accordion type="single" collapsible className="w-full p-4 shadow-lg">
         {/* Tickets Owned */}
         <AccordionItem value="item-1">
-          <AccordionTrigger>Tickets Owned</AccordionTrigger>
+          <AccordionTrigger>
+            Tickets Owned - {ownedTickets.length}
+          </AccordionTrigger>
           <AccordionContent>
             <TicketsDataTable tickets={ownedTickets} users={users} />
           </AccordionContent>
@@ -84,7 +51,9 @@ export default async function UserDetails({ params }: UserDetailsProps) {
 
         {/* Tickets Assigned */}
         <AccordionItem value="item-2">
-          <AccordionTrigger>Tickets Assigned</AccordionTrigger>
+          <AccordionTrigger>
+            Tickets Assigned - {assignedTickets.length}
+          </AccordionTrigger>
           <AccordionContent>
             <TicketsDataTable tickets={assignedTickets} users={users} />
           </AccordionContent>

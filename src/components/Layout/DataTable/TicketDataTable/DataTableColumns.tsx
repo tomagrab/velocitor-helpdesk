@@ -4,8 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { ColumnDef } from '@tanstack/react-table';
 import DataTableColumnsActions from './DataTableColumnsActions';
-import ColumnHeader from './DataTableColumnsHeader';
-import DataTableColumnsCell from './DataTableColumnsCell';
+import ColumnHeader from '../DataTableColumnsHeader/DataTableColumnsHeader';
+import DataTableColumnsCell from '../DataTableColumnsCell/DataTableColumnsCell';
 import { User } from '@clerk/nextjs/server';
 import Link from 'next/link';
 import { ChevronsDown, ChevronsRight, ChevronsUp } from 'lucide-react';
@@ -31,7 +31,9 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          <Link href={`/tickets/${ticket.ticket_id}`}>{ticket.ticket_id}</Link>
+          <Link className="text-center" href={`/tickets/${ticket.ticket_id}`}>
+            {ticket.ticket_id}
+          </Link>
         </DataTableColumnsCell>
       );
     },
@@ -55,7 +57,7 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
       return (
         <DataTableColumnsCell>
           <Link href={`/branches/${ticket.branches.branch_id}`}>
-            <Badge>{ticket.branches.branch_name}</Badge>
+            <Badge className="text-center">{ticket.branches.branch_name}</Badge>
           </Link>
         </DataTableColumnsCell>
       );
@@ -80,7 +82,9 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
       return (
         <DataTableColumnsCell>
           <Link href={`/companies/${ticket.branches.company_id}`}>
-            <Badge>{ticket.branches.companies.company_name}</Badge>
+            <Badge className="text-center">
+              {ticket.branches.companies.company_name}
+            </Badge>
           </Link>
         </DataTableColumnsCell>
       );
@@ -103,7 +107,9 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          <Badge className={`status ${ticket.status}`}>{ticket.status}</Badge>
+          <Badge className={`status ${ticket.status} text-center`}>
+            {ticket.status}
+          </Badge>
         </DataTableColumnsCell>
       );
     },
@@ -125,7 +131,7 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          <Badge className={`priority ${ticket.priority}`}>
+          <Badge className={`priority ${ticket.priority} text-center`}>
             {ticket.priority === 'low' ? (
               <>
                 <ChevronsDown size={16} /> {ticket.priority}{' '}
@@ -165,10 +171,19 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          {
-            users.find(user => user.id === ticket.assigned_to)
-              ?.emailAddresses[0].emailAddress
-          }
+          <Link
+            className="text-center"
+            href={`/users/${
+              users.find(user => user.id === ticket.assigned_to)?.id
+            }`}
+          >
+            <Badge className="text-center">
+              {
+                users.find(user => user.id === ticket.assigned_to)
+                  ?.emailAddresses[0].emailAddress
+              }
+            </Badge>
+          </Link>
         </DataTableColumnsCell>
       );
     },
@@ -194,10 +209,19 @@ export const getColumns = (users: User[]): ColumnDef<TicketData>[] => [
 
       return (
         <DataTableColumnsCell>
-          {
-            users.find(user => user.id === ticket.owned_by)?.emailAddresses[0]
-              .emailAddress
-          }
+          <Link
+            className="text-center"
+            href={`/users/${
+              users.find(user => user.id === ticket.owned_by)?.id
+            }`}
+          >
+            <Badge className="text-center">
+              {
+                users.find(user => user.id === ticket.owned_by)
+                  ?.emailAddresses[0].emailAddress
+              }
+            </Badge>
+          </Link>
         </DataTableColumnsCell>
       );
     },

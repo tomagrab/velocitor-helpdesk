@@ -107,7 +107,6 @@ export default async function CompanyDetails({
   )) as unknown as TicketData[];
   const data = await clerkClient.users.getUserList();
   const users = JSON.parse(JSON.stringify(data));
-  const companyName = company.company_name;
 
   return (
     <main>
@@ -119,21 +118,10 @@ export default async function CompanyDetails({
         <h3>Branches</h3>
         <BranchesDataTable branches={branches} />
       </div>
-      <div className="py-4">
-        {ticketsForCompany.length > 0 ? (
-          <h3>
-            {companyName} has <b>{ticketsForCompany.length}</b> tickets
-          </h3>
-        ) : ticketsForCompany.length === 1 ? (
-          <h3>
-            {companyName} has <b>{ticketsForCompany.length}</b> ticket
-          </h3>
-        ) : (
-          <h3>{companyName} has no tickets</h3>
-        )}
-      </div>
       <div>
-        <h3>Tickets</h3>
+        <h3>
+          Tickets - <b>{ticketsForCompany.length}</b>
+        </h3>
         <TicketsDataTable tickets={ticketsForCompany} users={users} />
       </div>
     </main>

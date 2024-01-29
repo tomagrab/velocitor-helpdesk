@@ -10,7 +10,7 @@ const roboto = Roboto({
 
 export default function Navbar() {
   return (
-    <nav>
+    <nav className="justify-between">
       <header>
         <div className="flex md:hidden ">
           <NavbarDropdown />

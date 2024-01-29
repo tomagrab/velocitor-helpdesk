@@ -2,7 +2,7 @@ import { supabaseClient } from '@/lib/Database/Supabase';
 import { auth } from '@clerk/nextjs/server';
 import { Company } from '@/lib/Types/Company/Company';
 import { clerkClient } from '@clerk/nextjs/server';
-import TicketForm from '@/components/Layout/Tickets/TicketForm/TicketForm';
+import TicketForm from '@/components/Layout/Ticket/TicketForm/TicketForm';
 
 const getCompanies = async () => {
   const { getToken } = auth();

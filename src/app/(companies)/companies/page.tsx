@@ -1,4 +1,4 @@
-import CompaniesDataTable from '@/components/Layout/DataTable/ComapniesDataTable/ComapniesDataTable';
+import CompaniesDataTable from '@/components/Layout/DataTable/CompaniesDataTable/CompaniesDataTable';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { Company } from '@/lib/Types/Company/Company';
 import { auth } from '@clerk/nextjs';

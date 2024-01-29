@@ -1,11 +1,11 @@
 'use client';
-import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import TicketDetailsCard from './TicketDetailsCard';
 import { useState } from 'react';
+import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { TicketOwnership } from '@/lib/Types/TicketOwnership/TicketOwnership';
 import { Company } from '@/lib/Types/Company/Company';
 import { User } from '@clerk/nextjs/server';
-import TicketForm from '@/components/Layout/Tickets/TicketForm/TicketForm';
+import TicketForm from '@/components/Layout/Ticket/TicketForm/TicketForm';
+import TicketDetailsCard from '@/components/Layout/Ticket/TicketDetailsCard/TicketDetailsCard';
 
 type TicketDetailsProps = {
   ticket: TicketData;

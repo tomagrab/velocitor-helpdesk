@@ -1,8 +1,8 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import ColumnHeader from './DataTableColumnsHeader';
-import DataTableColumnsCell from './DataTableColumnsCell';
+import ColumnHeader from '../DataTableColumnsHeader/DataTableColumnsHeader';
+import DataTableColumnsCell from '../DataTableColumnsCell/DataTableColumnsCell';
 import DataTableColumnsActions from './DataTableColumnsActions';
 import { Branch } from '@/lib/Types/Branch/Branch';
 import { Badge } from '@/components/ui/badge';
@@ -49,7 +49,10 @@ export const columns: ColumnDef<Branch>[] = [
       return (
         <DataTableColumnsCell>
           <Badge>
-            <Link href={`/branches/${branch.branch_id}`}>
+            <Link
+              className="text-center"
+              href={`/branches/${branch.branch_id}`}
+            >
               {branch.branch_name}
             </Link>
           </Badge>

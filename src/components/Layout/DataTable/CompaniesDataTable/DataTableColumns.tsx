@@ -1,8 +1,8 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import ColumnHeader from './DataTableColumnsHeader';
-import DataTableColumnsCell from './DataTableColumnsCell';
+import ColumnHeader from '../DataTableColumnsHeader/DataTableColumnsHeader';
+import DataTableColumnsCell from '../DataTableColumnsCell/DataTableColumnsCell';
 import { Company } from '@/lib/Types/Company/Company';
 import DataTableColumnsActions from './DataTableColumnsActions';
 import { Badge } from '@/components/ui/badge';

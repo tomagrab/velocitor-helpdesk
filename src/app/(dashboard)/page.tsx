@@ -45,37 +45,6 @@ export default async function Dashboard() {
     <main>
       <div className="flex flex-row items-baseline gap-2">
         <h2>Dashboard</h2>
-        {assignedTickets.length > 1 && ownedTickets.length > 1 ? (
-          <h3>
-            You have <b>{ownedTickets.length}</b> owned tickets and{' '}
-            <b>{assignedTickets.length}</b> assigned tickets
-          </h3>
-        ) : assignedTickets.length > 1 ? (
-          <h3>
-            You have <b>{assignedTickets.length}</b> assigned tickets and{' '}
-            <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : ownedTickets.length > 1 ? (
-          <h3>
-            You have <b>{ownedTickets.length}</b> owned tickets and{' '}
-            <b>{assignedTickets.length}</b> assigned ticket
-          </h3>
-        ) : assignedTickets.length === 1 && ownedTickets.length === 1 ? (
-          <h3>
-            You have <b>{assignedTickets.length}</b> assigned ticket and{' '}
-            <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : assignedTickets.length === 1 ? (
-          <h3>
-            You have <b>{assignedTickets.length}</b> assigned ticket
-          </h3>
-        ) : ownedTickets.length === 1 ? (
-          <h3>
-            You have <b>{ownedTickets.length}</b> owned ticket
-          </h3>
-        ) : (
-          <h3>You have no tickets</h3>
-        )}
       </div>
 
       {/* Tickets Accordion */}
@@ -108,7 +77,9 @@ export default async function Dashboard() {
             </AccordionItem>
           ) : null}
         </Accordion>
-      ) : null}
+      ) : (
+        <h3 className="text-3xl">No Tickets Found</h3>
+      )}
     </main>
   );
 }

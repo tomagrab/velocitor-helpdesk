@@ -3,7 +3,7 @@ import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { User, clerkClient, currentUser } from '@clerk/nextjs/server';
 import { TicketOwnership } from '@/lib/Types/TicketOwnership/TicketOwnership';
-import TicketDisplay from './TicketDisplay';
+import TicketDisplay from '../../../../components/Layout/Ticket/TicketDisplay/TicketDisplay';
 import { Company } from '@/lib/Types/Company/Company';
 
 type TicketDetailsProps = {

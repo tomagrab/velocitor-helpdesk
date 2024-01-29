@@ -115,7 +115,9 @@ export default async function CompanyDetails({
         <h2>{company.company_name}</h2>
       </div>
       <div>
-        <h3>Branches</h3>
+        <h3>
+          Branches - <b>{branches.length}</b>
+        </h3>
         <BranchesDataTable branches={branches} />
       </div>
       <div>

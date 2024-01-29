@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 type TicketsLayoutProps = {
   children: React.ReactNode;
@@ -10,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function TicketsLayout({ children }: TicketsLayoutProps) {
-  return <>{children};</>;
+  return <Suspense fallback={<Loading />}>{children}</Suspense>;
 }

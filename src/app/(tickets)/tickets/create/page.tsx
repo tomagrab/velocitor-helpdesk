@@ -1,5 +1,5 @@
 import { supabaseClient } from '@/lib/Database/Supabase';
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import { Company } from '@/lib/Types/Company/Company';
 import { clerkClient } from '@clerk/nextjs/server';
 import TicketForm from '@/components/Layout/Ticket/TicketForm/TicketForm';
@@ -35,6 +35,8 @@ export default async function Create() {
   const companies: Company[] = (await getCompanies()) as Company[];
   const data = await clerkClient.users.getUserList();
   const users = JSON.parse(JSON.stringify(data));
+  const signedInUser = await currentUser();
+  console.log(signedInUser);
 
   return (
     <main>

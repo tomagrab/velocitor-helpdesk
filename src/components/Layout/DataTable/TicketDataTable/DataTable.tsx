@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="shadow-md">
+    <div>
       <div className="grid grid-cols-3 gap-2 py-4 md:grid-cols-9">
         <Input
           placeholder="Filter Ticket #..."

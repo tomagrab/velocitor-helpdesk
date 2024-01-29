@@ -130,22 +130,11 @@ export default async function BranchDetails({
           <h3>{company.company_name}</h3>
         </div>
       </div>
-      <div className="py-4">
-        {ticketsForBranch.length > 0 ? (
-          <h3>
-            {branch.branch_name} has <b>{ticketsForBranch.length}</b> tickets
-          </h3>
-        ) : ticketsForBranch.length === 1 ? (
-          <h3>
-            {branch.branch_name} has <b>{ticketsForBranch.length}</b> ticket
-          </h3>
-        ) : (
-          <h3>
-            {branch.branch_name} has <b>no</b> tickets
-          </h3>
-        )}
-      </div>
+
       <div>
+        <h3>
+          Tickets - <b>{ticketsForBranch.length}</b>
+        </h3>
         <TicketsDataTable tickets={ticketsForBranch} users={users} />
       </div>
     </main>

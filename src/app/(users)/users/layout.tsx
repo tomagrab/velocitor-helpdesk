@@ -7,8 +7,8 @@ type TicketsLayoutProps = {
 };
 
 export const metadata: Metadata = {
-  title: 'Velocitor Helpdesk | Tickets',
-  description: 'The main Tickets page of Velocitor Helpdesk.',
+  title: 'Velocitor Helpdesk | Users',
+  description: 'The main Users page of Velocitor Helpdesk.',
 };
 
 export default function TicketsLayout({ children }: TicketsLayoutProps) {

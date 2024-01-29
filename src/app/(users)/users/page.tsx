@@ -12,7 +12,7 @@ export default async function Users() {
 
   return (
     <main>
-      <div className="flex flex-row items-baseline gap-2">
+      <div className="flex flex-row items-baseline gap-2 pb-4">
         <h2>Users</h2>
         <h3>
           There are <b>{users.length} Velocitor Helpdesk</b> users

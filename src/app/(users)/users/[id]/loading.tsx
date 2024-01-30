@@ -1,7 +1,11 @@
-import LoadingDisplay from '@/components/Layout/Loading/LoadingDisplay';
+import LoadingAccordion from '@/components/Layout/Loading/LoadingAccordion/LoadingAccordion';
+import UsersLoadingCard from '@/components/Layout/Loading/Users/UsersLoadingCard/UsersLoadingCard';
 
 export default function Loading() {
   return (
-    <LoadingDisplay title={`User`} message={`a Velocitor Helpdesk User`} />
+    <main>
+      <UsersLoadingCard />
+      <LoadingAccordion />
+    </main>
   );
 }

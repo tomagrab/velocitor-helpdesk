@@ -25,12 +25,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${roboto.className}`}>
-          <div className="flex min-h-screen overflow-auto">
+          <div className="flex min-h-screen">
             <input type="checkbox" id="sidebar-toggle" className="hidden" />
             <Sidebar />
-            <div className="flex w-full  flex-col">
+            <div className="flex min-h-screen min-w-0 flex-1 flex-col">
               <Navbar />
-              <div className="flex flex-1 overflow-auto bg-slate-200 p-4">
+              <div className="flex flex-1 bg-slate-200 p-4">
                 <div className="max-h-[calc(100vh-6rem)] flex-1 overflow-auto rounded bg-white p-4">
                   {children}
                 </div>

@@ -4,6 +4,7 @@ import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import Navbar from '@/components/Layout/Navbar/Navbar';
 import Sidebar from '@/components/Layout/Sidebar/Sidebar';
+import Footer from '@/components/Layout/Footer/Footer';
 
 const roboto = Roboto({
   weight: '400',
@@ -31,10 +32,11 @@ export default function RootLayout({
             <div className="flex min-h-screen min-w-0 flex-1 flex-col">
               <Navbar />
               <div className="flex flex-1 bg-slate-200 p-4">
-                <div className="max-h-[calc(100vh-6rem)] flex-1 overflow-auto rounded bg-white p-4">
+                <div className="max-h-[calc(100vh-8rem)] flex-1 overflow-auto rounded bg-white p-4">
                   {children}
                 </div>
               </div>
+              <Footer />
             </div>
           </div>
         </body>

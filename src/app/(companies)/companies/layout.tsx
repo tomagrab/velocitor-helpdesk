@@ -7,7 +7,7 @@ type TicketsLayoutProps = {
 };
 
 export const metadata: Metadata = {
-  title: 'Velocitor Helpdesk | Companies',
+  title: 'Companies | Velocitor Helpdesk',
   description: 'The main Companies page of Velocitor Helpdesk.',
 };
 

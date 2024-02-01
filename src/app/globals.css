@@ -173,3 +173,7 @@
 #sidebar-toggle:checked ~ div > nav > div > label > .sidebar-toggle-btn {
   @apply -rotate-180;
 }
+
+#sidebar-toggle:not(:checked) ~ div > nav > div > label > .sidebar-toggle-btn {
+  @apply rotate-0;
+}

@@ -13,31 +13,11 @@ export default function Sidebar() {
           alt="V"
         />
       </div>
-      <SidebarItem
-        href={`/`}
-        icon={<Home className="text-white" />}
-        title="Dashboard"
-      />
-      <SidebarItem
-        href={`/tickets`}
-        icon={<Ticket className="text-white" />}
-        title="Tickets"
-      />
-      <SidebarItem
-        href={`/companies`}
-        icon={<Building className="text-white" />}
-        title="Companies"
-      />
-      <SidebarItem
-        href={`/branches`}
-        icon={<Store className="text-white" />}
-        title="Branches"
-      />
-      <SidebarItem
-        href={`/users`}
-        icon={<User className="text-white" />}
-        title="Users"
-      />
+      <SidebarItem href={`/`} icon={<Home />} title="Dashboard" />
+      <SidebarItem href={`/tickets`} icon={<Ticket />} title="Tickets" />
+      <SidebarItem href={`/companies`} icon={<Building />} title="Companies" />
+      <SidebarItem href={`/branches`} icon={<Store />} title="Branches" />
+      <SidebarItem href={`/users`} icon={<User />} title="Users" />
     </aside>
   );
 }

@@ -19,7 +19,7 @@ export default function Navbar() {
       </div>
       <div className="shrink-0">
         <header>
-          <h1 className="text-2xl font-bold text-velblue drop-shadow-lg">
+          <h1 className="select-none text-2xl font-bold text-velblue drop-shadow-lg">
             Velocitor Helpdesk
           </h1>
         </header>

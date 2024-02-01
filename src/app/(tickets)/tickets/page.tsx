@@ -46,19 +46,7 @@ export default async function Tickets() {
       <div className="flex flex-row items-center justify-between pb-4">
         <div className="flex flex-row items-baseline gap-2">
           <h2>Tickets</h2>
-          {tickets.length > 0 && tickets.length != 1 ? (
-            <h3>
-              There are <b>{tickets.length}</b> tickets
-            </h3>
-          ) : tickets.length === 1 ? (
-            <h3>
-              There is <b>1</b> ticket
-            </h3>
-          ) : tickets.length === 0 ? (
-            <h3>
-              There are <b>0</b> tickets
-            </h3>
-          ) : null}
+          <h3>{tickets.length}</h3>
         </div>
 
         <Link href="/tickets/create">

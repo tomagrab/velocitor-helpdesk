@@ -4,7 +4,7 @@ import { Building, Home, Store, Ticket, User } from 'lucide-react';
 
 export default function Sidebar() {
   return (
-    <aside className="sidebar flex-shrink-0 transform overflow-hidden bg-slate-800 transition-all duration-300 ease-out">
+    <aside className="sidebar flex-shrink-0 transform overflow-hidden bg-velgray transition-all duration-300 ease-out">
       <div className="flex h-16 items-center justify-center bg-velblue">
         <Image
           width={32}

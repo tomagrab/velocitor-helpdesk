@@ -77,7 +77,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-2 py-4 md:grid-cols-9">
+      <div className="grid grid-cols-2 gap-2 py-4 md:grid-cols-9">
         <Input
           placeholder="Filter Ticket #..."
           className=""

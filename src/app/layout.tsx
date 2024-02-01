@@ -20,17 +20,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Make checkbox checked by default
   return (
     <ClerkProvider>
       <html lang="en">
         <body className={`${roboto.className}`}>
-          <div className="flex min-h-screen">
+          <div className="flex min-h-screen overflow-hidden">
             <input type="checkbox" id="sidebar-toggle" className="hidden" />
             <Sidebar />
-            <div className="flex min-h-screen flex-1 flex-col">
+            <div className="flex w-full flex-col">
               <Navbar />
-              <div className="flex flex-1 bg-slate-200 p-4">
-                <div className="max-h-[calc(100vh-6rem)] max-w-full flex-1 overflow-auto rounded bg-white p-4">
+              <div className="flex flex-1 overflow-auto bg-slate-200 p-4">
+                <div className="max-h-[calc(100vh-6rem)] flex-grow overflow-auto rounded bg-white p-4">
                   {children}
                 </div>
               </div>

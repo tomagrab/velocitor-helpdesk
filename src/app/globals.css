@@ -75,24 +75,6 @@
     @apply bg-background text-foreground;
   }
 
-  nav {
-    @apply justify-center gap-2 p-4 shadow-lg md:justify-between md:gap-0;
-  }
-
-  nav,
-  header {
-    @apply flex items-center;
-  }
-
-  header {
-    @apply flex-col gap-2 md:flex-row;
-  }
-
-  main {
-    @apply p-8;
-  }
-
-  main,
   form {
     @apply flex flex-col;
   }
@@ -178,4 +160,16 @@
 * {
   scrollbar-width: thin; /* "auto" or "thin" */
   scrollbar-color: #888 #f1f1f1; /* thumb and track color */
+}
+
+#sidebar-toggle:checked ~ .sidebar {
+  @apply w-24;
+}
+
+#sidebar-toggle:not(:checked) ~ .sidebar {
+  @apply w-0;
+}
+
+#sidebar-toggle:checked ~ div > nav > div > label > .sidebar-toggle-btn {
+  @apply -rotate-180;
 }

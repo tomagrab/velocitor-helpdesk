@@ -3,6 +3,7 @@ import NavbarLinks from './NavbarLinks/NavbarLinks';
 import NavbarUser from './NavbarUser/NavbarUser';
 import { Roboto } from 'next/font/google';
 import NavbarDropdown from './NavbarDropdown/NavbarDropdown';
+import { ChevronsRight } from 'lucide-react';
 const roboto = Roboto({
   weight: '900',
   subsets: ['latin'],
@@ -10,34 +11,21 @@ const roboto = Roboto({
 
 export default function Navbar() {
   return (
-    <nav className="justify-between">
-      <header>
-        <div className="flex md:hidden ">
-          <NavbarDropdown />
-        </div>
-
-        <div className="hidden md:flex md:items-center md:gap-2">
-          <Avatar>
-            <AvatarImage
-              src="https://vtrackuat.velsol.com/Content/images/VTrack-Logo-Small.png"
-              alt="Velocitor Logo"
-            />
-            <AvatarFallback>VH</AvatarFallback>
-          </Avatar>
-          <h1>
-            <span className={`velocitor blue ${roboto.className}`}>
-              Velocitor
-            </span>
-            {` `}
-            <span className={`velocitor yellow green ${roboto.className}`}>
-              Helpdesk
-            </span>
-          </h1>
-
-          <NavbarLinks className="flex flex-row items-center" />
-        </div>
-      </header>
-      <NavbarUser />
+    <nav className="flex h-16 w-full items-center justify-between bg-white px-4 shadow-lg">
+      <div className="w-1/2 justify-start">
+        <label htmlFor="sidebar-toggle" className="cursor-pointer ">
+          <ChevronsRight
+            className="text-velgray sidebar-toggle-btn transition-transform duration-300 ease-out"
+            size={24}
+          />
+        </label>
+      </div>
+      <div className="shrink-0">
+        <header>
+          <h1 className="text-velblue text-2xl font-bold">Veloci-Points</h1>
+        </header>
+      </div>
+      <div className="w-1/2 justify-end"></div>
     </nav>
   );
 }

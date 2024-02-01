@@ -3,6 +3,7 @@ import { Roboto } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import Navbar from '@/components/Layout/Navbar/Navbar';
+import Sidebar from '@/components/Layout/Sidebar/Sidebar';
 
 const roboto = Roboto({
   weight: '400',
@@ -23,8 +24,18 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${roboto.className}`}>
-          <Navbar />
-          {children}
+          <div className="flex min-h-screen">
+            <input type="checkbox" id="sidebar-toggle" className="hidden" />
+            <Sidebar />
+            <div className="flex min-h-screen flex-1 flex-col">
+              <Navbar />
+              <div className="flex flex-1 bg-slate-200 p-4">
+                <div className="max-h-[calc(100vh-6rem)] max-w-full flex-1 overflow-auto rounded bg-white p-4">
+                  {children}
+                </div>
+              </div>
+            </div>
+          </div>
         </body>
       </html>
     </ClerkProvider>

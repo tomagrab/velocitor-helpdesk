@@ -5,6 +5,9 @@ const nextConfig = {
       {
         hostname: 'vtrack.velsol.com',
       },
+      {
+        hostname: 'www.velsol.com',
+      },
     ],
   },
 };

@@ -29,19 +29,7 @@ export default async function Companies() {
     <main>
       <div className="flex flex-row items-baseline gap-2">
         <h2>Companies</h2>
-        {companies.length > 0 && companies.length != 1 ? (
-          <h3>
-            There are <b>{companies.length}</b> companies
-          </h3>
-        ) : companies.length === 1 ? (
-          <h3>
-            There is <b>1</b> company
-          </h3>
-        ) : companies.length === 0 ? (
-          <h3>
-            There are <b>0</b> companies
-          </h3>
-        ) : null}
+        <h3>{companies.length}</h3>
       </div>
       <CompaniesDataTable companies={companies} />
     </main>

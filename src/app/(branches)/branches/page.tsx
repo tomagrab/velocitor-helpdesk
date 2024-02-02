@@ -29,19 +29,7 @@ export default async function Branches() {
     <main>
       <div className="flex flex-row items-baseline gap-2">
         <h2>Branches</h2>
-        {branches.length > 0 && branches.length != 1 ? (
-          <h3>
-            There are <b>{branches.length}</b> branches
-          </h3>
-        ) : branches.length === 1 ? (
-          <h3>
-            There is <b>1</b> company
-          </h3>
-        ) : branches.length === 0 ? (
-          <h3>
-            There are <b>0</b> branches
-          </h3>
-        ) : null}
+        <h3>{branches.length}</h3>
       </div>
       <BranchesDataTable branches={branches} />
     </main>

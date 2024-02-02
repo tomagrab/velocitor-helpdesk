@@ -1,46 +1,15 @@
 import Link from 'next/link';
 import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
-import { auth } from '@clerk/nextjs';
-import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { clerkClient } from '@clerk/nextjs/server';
-
-const getTickets = async () => {
-  const { getToken } = auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase.from('tickets').select(
-    `
-            ticket_id,
-            status,
-            priority,
-            user_id,
-            assigned_to,
-            owned_by,
-            created_at,
-            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-      `,
-  );
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as TicketData[]) || [];
-};
+import { getAllTickets } from '@/lib/Utilities/GetAllTickets/GetAllTickets';
 
 export default async function Tickets() {
-  const tickets: TicketData[] = (await getTickets()) as TicketData[];
+  const tickets: TicketData[] = (await getAllTickets()) as TicketData[];
   const data = await clerkClient.users.getUserList();
   const users = JSON.parse(JSON.stringify(data));
+
   return (
     <main>
       <div className="flex flex-row items-center justify-between pb-4">

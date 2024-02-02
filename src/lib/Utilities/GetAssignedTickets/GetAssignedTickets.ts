@@ -1,3 +1,4 @@
+'use server';
 import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { auth } from '@clerk/nextjs/server';

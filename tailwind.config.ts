@@ -29,6 +29,8 @@ const config = {
         velgray: '#263238',
         vellightgray: '#bbc1c7',
         vellink: '#56bfb5',
+        officegreen: '#008000',
+        officelightgreen: '#009e00',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

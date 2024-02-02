@@ -4,8 +4,6 @@ import { DataTable } from './DataTable';
 import { getColumns } from './DataTableColumns';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { exportTicketsToXLSX } from '@/lib/Utilities/ExportTicketsToXLSX/ExportTicketsToXLSX';
-import { Button } from '@/components/ui/button';
-import { FileSpreadsheet } from 'lucide-react';
 import ExportToXLSXButton from '@/components/ui/exportToXSLXButton';
 
 type TicketDataTableProps = {

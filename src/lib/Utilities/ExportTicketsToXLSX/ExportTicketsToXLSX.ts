@@ -20,7 +20,7 @@ export async function exportTicketsToXLSX(
       users.find(user => user.id === ticket.owned_by)?.emailAddresses[0]
         .emailAddress || 'Unowned',
     Notes: ticket.notes,
-    'Created At': ticket.created_at,
+    'Created At': ticket.created_at ? new Date(ticket.created_at) : 'No date',
   }));
 
   // Generate a new worksheet

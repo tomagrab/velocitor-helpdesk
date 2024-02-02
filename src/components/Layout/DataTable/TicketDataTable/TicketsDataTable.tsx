@@ -6,6 +6,7 @@ import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { exportTicketsToXLSX } from '@/lib/Utilities/ExportTicketsToXLSX/ExportTicketsToXLSX';
 import { Button } from '@/components/ui/button';
 import { FileSpreadsheet } from 'lucide-react';
+import ExportToXLSXButton from '@/components/ui/exportToXSLXButton';
 
 type TicketDataTableProps = {
   tickets: TicketData[];
@@ -18,21 +19,13 @@ export default function TicketsDataTable({
 }: TicketDataTableProps) {
   // This function will be called when the export button is clicked
   const handleExportClick = async () => {
-    console.log('Exporting to XLSX');
-    console.log('Tickets:', tickets);
     // Call your export function here
     await exportTicketsToXLSX(tickets, users);
   };
 
   return (
     <>
-      <Button
-        onClick={handleExportClick}
-        className="bg-officegreen hover:bg-officelightgreen flex items-center gap-2 transition-colors duration-300 ease-in-out"
-      >
-        <FileSpreadsheet className="h-5 w-5" />
-        Export to Excel
-      </Button>
+      <ExportToXLSXButton onClick={handleExportClick} />
       <DataTable columns={getColumns(users)} data={tickets} />
     </>
   );

@@ -3,7 +3,7 @@ import { ChevronsRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function NavbarSidebarToggle() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkScreenWidthAndSetSidebar = () => {

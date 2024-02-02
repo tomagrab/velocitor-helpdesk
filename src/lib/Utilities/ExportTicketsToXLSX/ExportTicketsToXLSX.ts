@@ -8,9 +8,9 @@ export async function exportTicketsToXLSX(
 ) {
   // Transform the ticket data into a format that XLSX can understand
   const rows = tickets.map(ticket => ({
-    'Ticket ID': ticket.ticket_id,
-    'Branch Name': ticket.branches.branch_name,
-    'Company Name': ticket.branches.companies.company_name,
+    'Ticket ID': ticket.ticket_id || 'No ID',
+    'Branch Name': ticket.branches.branch_name || 'No branch',
+    'Company Name': ticket.branches.companies.company_name || 'No company',
     Status: ticket.status,
     Priority: ticket.priority,
     'Assigned To':

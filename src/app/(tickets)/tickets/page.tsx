@@ -6,7 +6,8 @@ import { clerkClient } from '@clerk/nextjs/server';
 import { getAllTickets } from '@/lib/Utilities/GetAllTickets/GetAllTickets';
 
 export default async function Tickets() {
-  const tickets: TicketData[] = (await getAllTickets()) as TicketData[];
+  const tickets: TicketData[] =
+    (await getAllTickets()) as unknown as TicketData[];
   const data = await clerkClient.users.getUserList();
   const users = JSON.parse(JSON.stringify(data));
 

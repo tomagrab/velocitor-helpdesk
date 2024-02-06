@@ -30,10 +30,10 @@ export default async function Dashboard() {
 
   const assignedTickets: TicketData[] = (await getAssignedTickets(
     userId,
-  )) as TicketData[];
+  )) as unknown as TicketData[];
   const ownedTickets: TicketData[] = (await getOwnedTickets(
     userId,
-  )) as TicketData[];
+  )) as unknown as TicketData[];
 
   return (
     <main>

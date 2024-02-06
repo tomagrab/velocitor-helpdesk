@@ -1,9 +1,11 @@
 import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
-import { prisma } from '@/lib/Database/Database';
 import { Branch } from '@/lib/Types/Branch/Branch';
 import { Company } from '@/lib/Types/Company/Company';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
+import { getBranch } from '@/lib/Utilities/GetBranch/GetBranch';
+import { getCompany } from '@/lib/Utilities/GetCompany/GetCompany';
+import { getTicketsForBranch } from '@/lib/Utilities/GetTicketsForBranch/GetTicketsForBranch';
 import { clerkClient } from '@clerk/nextjs/server';
 
 type BranchDetailsProps = {
@@ -23,54 +25,6 @@ export async function generateMetadata({ params: { id } }: BranchDetailsProps) {
     description: `The branch ${branch.branch_name} of the company ${company.company_name}.`,
   };
 }
-
-const getBranch = async (id: number) => {
-  const branch = await prisma.branches.findUnique({
-    where: { branch_id: id },
-  });
-
-  if (!branch) {
-    console.error('No branch found');
-    return;
-  }
-
-  return branch;
-};
-
-const getCompany = async (id: number) => {
-  const company = await prisma.companies.findUnique({
-    where: { company_id: id },
-  });
-
-  if (!company) {
-    console.error('No company found');
-    return;
-  }
-
-  return company;
-};
-
-const getTicketsForBranch = async (id: number) => {
-  const tickets = await prisma.tickets.findMany({
-    where: { branch_id: id },
-    include: {
-      branches: {
-        select: {
-          branch_name: true,
-          branch_id: true,
-          company_id: true,
-          companies: {
-            select: {
-              company_name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  return tickets;
-};
 
 export default async function BranchDetails({
   params: { id },

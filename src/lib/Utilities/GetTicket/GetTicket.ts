@@ -1,11 +1,10 @@
-'use server';
 import { prisma } from '@/lib/Database/Database';
 
-export const getOwnedTickets = async (userId: string) => {
+export const getTicket = async (id: number) => {
   try {
-    const ownedTickets = await prisma.tickets.findMany({
+    const ticket = await prisma.tickets.findUnique({
       where: {
-        owned_by: userId,
+        ticket_id: id,
       },
       include: {
         branches: {
@@ -16,12 +15,12 @@ export const getOwnedTickets = async (userId: string) => {
       },
     });
 
-    if (!ownedTickets) {
-      console.error('No tickets found');
+    if (!ticket) {
+      console.error('No ticket found');
       return [];
     }
 
-    return ownedTickets;
+    return ticket;
   } catch (error) {
     console.error(error);
     return [];

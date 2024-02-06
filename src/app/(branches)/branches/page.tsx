@@ -1,16 +1,6 @@
 import BranchesDataTable from '@/components/Layout/DataTable/BranchesDataTable/BranchesDataTable';
-import { prisma } from '@/lib/Database/Database';
 import { Branch } from '@/lib/Types/Branch/Branch';
-
-const getBranches = async () => {
-  try {
-    const branches = await prisma.branches.findMany();
-    return branches;
-  } catch (error) {
-    console.error(`Error fetching branches: ${error}`);
-    return [];
-  }
-};
+import { getBranches } from '@/lib/Utilities/GetBranches/GetBranches';
 
 export default async function Branches() {
   const branches: Branch[] = (await getBranches()) as Branch[];

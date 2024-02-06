@@ -1,38 +1,29 @@
 'use server';
-import { supabaseClient } from '@/lib/Database/Supabase';
-import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import { auth } from '@clerk/nextjs/server';
+import { prisma } from '@/lib/Database/Database';
 
 export const getAssignedTickets = async (userId: string) => {
-  const { getToken } = auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
+  try {
+    const assignedTickets = await prisma.tickets.findMany({
+      where: {
+        assigned_to: userId,
+      },
+      include: {
+        branches: {
+          include: {
+            companies: true,
+          },
+        },
+      },
+    });
 
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
+    if (!assignedTickets) {
+      console.error('No tickets found');
+      return [];
+    }
+
+    return assignedTickets;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('tickets')
-    .select(
-      `
-              ticket_id,
-              status,
-              priority,
-              user_id,
-              assigned_to,
-              owned_by,
-              created_at,
-              branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-        `,
-    )
-    .eq('assigned_to', userId);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as TicketData[]) || [];
 };

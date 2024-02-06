@@ -1,10 +1,9 @@
 import TicketsDataTable from '@/components/Layout/DataTable/TicketDataTable/TicketsDataTable';
 import { Badge } from '@/components/ui/badge';
-import { supabaseClient } from '@/lib/Database/Supabase';
+import { prisma } from '@/lib/Database/Database';
 import { Branch } from '@/lib/Types/Branch/Branch';
 import { Company } from '@/lib/Types/Company/Company';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import { auth } from '@clerk/nextjs';
 import { clerkClient } from '@clerk/nextjs/server';
 
 type BranchDetailsProps = {
@@ -26,83 +25,51 @@ export async function generateMetadata({ params: { id } }: BranchDetailsProps) {
 }
 
 const getBranch = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
+  const branch = await prisma.branches.findUnique({
+    where: { branch_id: id },
+  });
 
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
+  if (!branch) {
+    console.error('No branch found');
     return;
   }
 
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('branches')
-    .select('*')
-    .eq('branch_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data[0] as unknown as Branch) || [];
+  return branch;
 };
 
 const getCompany = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
+  const company = await prisma.companies.findUnique({
+    where: { company_id: id },
+  });
 
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
+  if (!company) {
+    console.error('No company found');
     return;
   }
 
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('companies')
-    .select('*')
-    .eq('company_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data[0] as unknown as Company) || [];
+  return company;
 };
 
 const getTicketsForBranch = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
+  const tickets = await prisma.tickets.findMany({
+    where: { branch_id: id },
+    include: {
+      branches: {
+        select: {
+          branch_name: true,
+          branch_id: true,
+          company_id: true,
+          companies: {
+            select: {
+              company_name: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('tickets')
-    .select(
-      `
-            ticket_id,
-            status,
-            priority,
-            user_id,
-            assigned_to,
-            owned_by,
-            created_at,
-            branches:branches!inner(branch_name, branch_id, company_id, companies:companies!inner(company_name))
-    `,
-    )
-    .eq('branch_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as Branch[]) || [];
+  return tickets;
 };
 
 export default async function BranchDetails({

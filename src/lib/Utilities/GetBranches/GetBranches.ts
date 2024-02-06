@@ -1,19 +1,11 @@
 import { prisma } from '@/lib/Database/Database';
 
-export const getBranches = async (id: number) => {
+export const getBranches = async () => {
   try {
-    const branches = await prisma.branches.findMany({
-      where: { company_id: id },
-    });
-
-    if (!branches) {
-      console.error('No branches found');
-      return;
-    }
-
+    const branches = await prisma.branches.findMany();
     return branches;
   } catch (error) {
     console.error(`Error fetching branches: ${error}`);
-    return;
+    return [];
   }
 };

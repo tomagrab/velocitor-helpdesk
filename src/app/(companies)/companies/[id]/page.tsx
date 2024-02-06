@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Branch } from '@/lib/Types/Branch/Branch';
 import { Company } from '@/lib/Types/Company/Company';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
-import { getBranches } from '@/lib/Utilities/GetBranches/GetBranches';
+import { getBranchesForCompany } from '@/lib/Utilities/GetBranchesForCompany/GetBranchesForCompany';
 import { getCompany } from '@/lib/Utilities/GetCompany/GetCompany';
 import { getTicketsForCompany } from '@/lib/Utilities/GetTicketsForCompany/GetTicketsForCompany';
 import { clerkClient } from '@clerk/nextjs/server';
@@ -19,7 +19,7 @@ export default async function CompanyDetails({
   params: { id },
 }: CompanyDetailsProps) {
   const company: Company = (await getCompany(Number(id))) as unknown as Company;
-  const branches: Branch[] = (await getBranches(
+  const branches: Branch[] = (await getBranchesForCompany(
     Number(id),
   )) as unknown as Branch[];
   const ticketsForCompany: TicketData[] = (await getTicketsForCompany(

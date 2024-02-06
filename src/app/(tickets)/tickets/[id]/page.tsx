@@ -1,10 +1,10 @@
-import { auth } from '@clerk/nextjs';
-import { supabaseClient } from '@/lib/Database/Supabase';
 import { TicketData } from '@/lib/Types/TicketData/TicketData';
 import { User, clerkClient, currentUser } from '@clerk/nextjs/server';
 import { TicketOwnership } from '@/lib/Types/TicketOwnership/TicketOwnership';
-import TicketDisplay from '../../../../components/Layout/Ticket/TicketDisplay/TicketDisplay';
+import TicketDisplay from '@/components/Layout/Ticket/TicketDisplay/TicketDisplay';
 import { Company } from '@/lib/Types/Company/Company';
+import { getTicket } from '@/lib/Utilities/GetTicket/GetTicket';
+import { getCompanies } from '@/lib/Utilities/GetCompanies/GetCompanies';
 
 type TicketDetailsProps = {
   params: {
@@ -16,68 +16,14 @@ type TicketDetailsProps = {
   };
 };
 
-const getTicket = async (id: number) => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase
-    .from('tickets')
-    .select(
-      `
-        ticket_id,
-        status,
-        priority,
-        user_id,
-        notes,
-        assigned_to,
-        owned_by,
-        created_at,
-        branch_id,
-        branches:branches!inner(branch_name, companies:companies!inner(company_name, company_id))
-      `,
-    )
-    .eq('ticket_id', id);
-
-  if (error) {
-    throw error;
-  }
-
-  return (data[0] as unknown as TicketData) || [];
-};
-
-const getCompanies = async () => {
-  const { getToken } = await auth();
-  const supabaseAccessToken = await getToken({ template: 'supabase' });
-
-  if (!supabaseAccessToken) {
-    console.error('No access token found');
-    return;
-  }
-
-  const supabase = await supabaseClient(supabaseAccessToken);
-
-  const { data, error } = await supabase.from('companies').select('*');
-
-  if (error) {
-    throw error;
-  }
-
-  return (data as unknown as Company) || [];
-};
-
 export default async function TicketDetails({
   params: { id },
   searchParams,
 }: TicketDetailsProps) {
   let editMode = false;
-  const ticket: TicketData = (await getTicket(Number(id))) as TicketData;
+  const ticket: TicketData = (await getTicket(
+    Number(id),
+  )) as unknown as TicketData;
   const data: User[] = await clerkClient.users.getUserList();
   const users: User[] = JSON.parse(JSON.stringify(data));
   const companies: Company[] = (await getCompanies()) as unknown as Company[];

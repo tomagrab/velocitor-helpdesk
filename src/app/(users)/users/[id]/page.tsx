@@ -23,10 +23,10 @@ export default async function UserDetails({ params }: UserDetailsProps) {
 
   const assignedTickets: TicketData[] = (await getAssignedTickets(
     user.id,
-  )) as TicketData[];
+  )) as unknown as TicketData[];
   const ownedTickets: TicketData[] = (await getOwnedTickets(
     user.id,
-  )) as TicketData[];
+  )) as unknown as TicketData[];
 
   return (
     <main>

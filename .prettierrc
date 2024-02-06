@@ -9,5 +9,9 @@
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "arrowParens": "avoid",
-  "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-sql-cst"]
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-sql-cst",
+    "prettier-plugin-prisma"
+  ]
 }
